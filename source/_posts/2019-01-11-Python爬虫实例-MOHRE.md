@@ -74,7 +74,7 @@ mohre/
 4. 运行爬虫程序, 输出到`csv`文件
 
 ```
-scrapy crawl labour -o emplist.csv
+scrapy crawl emp -o emplist.csv
 ```
 
 ### 2. requests
