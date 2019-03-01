@@ -100,26 +100,28 @@
 <meta name="keywords" content="编程,C语言,环境,tcc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言开发环境配置(win)">
-<meta property="og:url" content="http://wangmiao.site/2017/09/13/C语言开发环境配置-win/index.html">
+<meta property="og:url" content="http://wangmiao.site/2017/09/13/C语言开发环境配置(win)/index.html">
 <meta property="og:site_name" content="Wang Miao&#39;s Site">
 <meta property="og:description" content="一. 开始前准备 随着win系统的不断升级, 现在已到了win10(2017年), 想要学习C语言的小伙伴发现vc6.0没办法装在win10上面, 所以就写一个教程来搭建一个简单的环境吧.  1. 编辑器: sublime text3sublime text3就不用说明了, 一个简洁而又强大的编辑器 下载地址:官网 注册码: 百度搜索&amp;quot;sublime tex3 注册码&amp;quot; 官方文">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/8e480af026effa6.jpg">
-<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/b724b67fe368e91.jpg">
-<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/54d3d943c8efc7b.jpg">
-<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/2d22d417909f2c1.jpg">
+<meta property="og:image" content="http://wangmiao.site/images/2017-09-13/00sublime%20text3效果图.png">
+<meta property="og:image" content="http://wangmiao.site/images/2017-09-13/01Cmder运行效果图.png">
+<meta property="og:image" content="http://wangmiao.site/images/2017-09-13/02解压到任意文件夹.png">
+<meta property="og:image" content="http://wangmiao.site/images/2017-09-13/03添加tcc到环境变量path.png">
+<meta property="og:image" content="http://wangmiao.site/images/2017-09-13/04tcc运行图.png">
+<meta property="og:image" content="http://wangmiao.site/images/2017-09-13/05sublime%20text3与tcc运行效果图.png">
 <meta property="og:updated_time" content="2018-11-09T11:01:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C语言开发环境配置(win)">
 <meta name="twitter:description" content="一. 开始前准备 随着win系统的不断升级, 现在已到了win10(2017年), 想要学习C语言的小伙伴发现vc6.0没办法装在win10上面, 所以就写一个教程来搭建一个简单的环境吧.  1. 编辑器: sublime text3sublime text3就不用说明了, 一个简洁而又强大的编辑器 下载地址:官网 注册码: 百度搜索&amp;quot;sublime tex3 注册码&amp;quot; 官方文">
-<meta name="twitter:image" content="http://ozi7kdi5x.bkt.clouddn.com/8e480af026effa6.jpg">
+<meta name="twitter:image" content="http://wangmiao.site/images/2017-09-13/00sublime%20text3效果图.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://wangmiao.site/2017/09/13/C语言开发环境配置-win/">
+  <link rel="canonical" href="http://wangmiao.site/2017/09/13/C语言开发环境配置(win)/">
 
 
 
@@ -328,7 +330,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wangmiao.site/2017/09/13/C语言开发环境配置-win/">
+    <link itemprop="mainEntityOfPage" href="http://wangmiao.site/2017/09/13/C语言开发环境配置(win)/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wang Miao">
@@ -461,6 +463,8 @@
 <p>注册码: 百度搜索<code>&quot;sublime tex3 注册码&quot;</code></p>
 <p><a href="http://www.sublimetext.com/docs/3/" target="_blank" rel="noopener">官方文档</a></p>
 <p><a href="http://docs.sublimetext.info/en/latest/index.html" target="_blank" rel="noopener">非官方文档</a>, 虽然非官方, 却有更多实用的东西</p>
+<p>附效果图:</p>
+<p><img src="/images/2017-09-13/00sublime text3效果图.png" alt="sublime text3效果图"></p>
 <h3 id="2-编译器-tcc"><a href="#2-编译器-tcc" class="headerlink" title="2. 编译器: tcc"></a>2. 编译器: tcc</h3><p><code>tcc</code>: 一个极小的C语言编译器(Tiny C Compiler), 由于win下没有自带gcc编译器, tcc是一个很好的选择, 特点:</p>
 <ul>
 <li>非常小巧</li>
@@ -469,7 +473,7 @@
 </ul>
 <p>下载地址: <a href="https://bellard.org/tcc/" target="_blank" rel="noopener">tcc</a></p>
 <p>文档地址: <a href="https://bellard.org/tcc/tcc-doc.html" target="_blank" rel="noopener">文档</a></p>
-<h3 id="3-运行方式-cmd或cmder-conemu中运行"><a href="#3-运行方式-cmd或cmder-conemu中运行" class="headerlink" title="3. 运行方式: cmd或cmder/conemu中运行"></a>3. 运行方式: cmd或cmder/conemu中运行</h3><p>理想运行方式: </p>
+<h3 id="3-运行方式-cmd或cmder-conemu-可选-中运行"><a href="#3-运行方式-cmd或cmder-conemu-可选-中运行" class="headerlink" title="3. 运行方式: cmd或cmder/conemu(可选)中运行"></a>3. 运行方式: cmd或cmder/conemu(可选)中运行</h3><p>理想运行方式: </p>
 <ol>
 <li>在sublime text3中码代码</li>
 <li><code>ctrl+b</code>一键运行(中间tcc负责编译, 链接)</li>
@@ -478,13 +482,13 @@
 <p>cmder/conemu不是必须的选项, 只是美化效果及其他一些增强命令比较好用</p>
 <p>下载地址: <a href="http://cmder.net/" target="_blank" rel="noopener">cmder</a></p>
 <p>附效果图:</p>
-<p><img src="http://ozi7kdi5x.bkt.clouddn.com/8e480af026effa6.jpg" alt="image"></p>
+<p><img src="/images/2017-09-13/01Cmder运行效果图.png" alt="Cmder运行效果图"></p>
 <h2 id="二-安装配置"><a href="#二-安装配置" class="headerlink" title="二. 安装配置"></a>二. 安装配置</h2><h3 id="1-配置tcc"><a href="#1-配置tcc" class="headerlink" title="1. 配置tcc"></a>1. 配置tcc</h3><ol>
 <li><p>tcc 下载解压后放到任意文件夹, 添加tcc路径到PATH环境变量:</p>
-<p> <img src="http://ozi7kdi5x.bkt.clouddn.com/b724b67fe368e91.jpg" alt="image"></p>
+<p> 解压到任意文件夹<br> <img src="/images/2017-09-13/02解压到任意文件夹.png" alt="解压到任意文件夹"><br> 添加tcc到环境变量path<br> <img src="/images/2017-09-13/03添加tcc到环境变量path.png" alt="添加tcc到环境变量path"></p>
 </li>
 <li><p>现在命令行窗口键入<code>tcc</code>, 有类似下面的显示, 说明配置好了</p>
-<p> <img src="http://ozi7kdi5x.bkt.clouddn.com/54d3d943c8efc7b.jpg" alt="image"></p>
+<p> <img src="/images/2017-09-13/04tcc运行图.png" alt="tcc运行图"></p>
 </li>
 </ol>
 <h3 id="2-在sublime-text3中添加tcc编译系统"><a href="#2-在sublime-text3中添加tcc编译系统" class="headerlink" title="2. 在sublime text3中添加tcc编译系统"></a>2. 在sublime text3中添加tcc编译系统</h3><p>sublime text3中可以自定义编译系统, 看起来好像十分复杂样子, 实际上非常简单, <a href="http://docs.sublimetext.info/en/latest/file_processing/build_systems.html" target="_blank" rel="noopener">参考文档</a></p>
@@ -497,7 +501,7 @@
 <h3 id="3-测试运行"><a href="#3-测试运行" class="headerlink" title="3. 测试运行"></a>3. 测试运行</h3><p>在sublime text3中随便编写一个C语言文件, 例:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;float.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"char的范围:%d~%d\n"</span>, CHAR_MIN, CHAR_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"unsigned char的范围:0~%u\n"</span>, UCHAR_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"short的范围:%d~%d\n"</span>, SHRT_MIN, SHRT_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"unsigned short的范围:0~%u\n"</span>, USHRT_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"int的范围:%d~%d\n"</span>, INT_MIN, INT_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"unsigned int的范围:0~%u\n"</span>, UINT_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"long的范围:%ld~%ld\n"</span>, LONG_MIN, LONG_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"unsigned long的范围:0~%lu\n"</span>, ULONG_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"long long的范围:%lld~%lld\n"</span>, LLONG_MIN, LLONG_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"unsigned long long的范围:0~%llu\n\n"</span>, ULLONG_MAX);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"float的最小非零值:%.3e\n"</span>, FLT_MIN);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"flaot的最大值:%.3e\n"</span>, FLT_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"double的最小非零值:%.3e\n"</span>, DBL_MIN);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"double的最大值:%.3e\n"</span>, DBL_MAX);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"long double的最小非零值:%.3le\n"</span>, LDBL_MIN);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"long double的最大值:%.3le\n\n"</span>, LDBL_MAX);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"flaot类型的十进制精度:%u\n"</span>, FLT_DIG);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"double类型的十进制精度:%u\n"</span>, DBL_DIG);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"long double的十进制精度:%u\n"</span>, LDBL_DIG);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>快捷键<code>ctrl+b</code> 或者菜单<code>Tools</code> -&gt; <code>Bulid System</code> -&gt; <code>tcc</code>, 自动弹出命令行窗口, 并运行程序了:</p>
-<p><img src="http://ozi7kdi5x.bkt.clouddn.com/2d22d417909f2c1.jpg" alt="image"></p>
+<p><img src="/images/2017-09-13/05sublime text3与tcc运行效果图.png" alt="sublime text3与tcc运行效果图"></p>
 <h3 id="4-其他问题"><a href="#4-其他问题" class="headerlink" title="4. 其他问题"></a>4. 其他问题</h3><p>乱码问题, 更改命令行代码页, <a href="http://blog.csdn.net/zhyh1435589631/article/details/51303756" target="_blank" rel="noopener">参考文章</a></p>
 
       
@@ -781,7 +785,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-开始前准备"><span class="nav-text">一. 开始前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-编辑器-sublime-text3"><span class="nav-text">1. 编辑器: sublime text3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-编译器-tcc"><span class="nav-text">2. 编译器: tcc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-运行方式-cmd或cmder-conemu中运行"><span class="nav-text">3. 运行方式: cmd或cmder/conemu中运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-安装配置"><span class="nav-text">二. 安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-配置tcc"><span class="nav-text">1. 配置tcc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在sublime-text3中添加tcc编译系统"><span class="nav-text">2. 在sublime text3中添加tcc编译系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-测试运行"><span class="nav-text">3. 测试运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-其他问题"><span class="nav-text">4. 其他问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-开始前准备"><span class="nav-text">一. 开始前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-编辑器-sublime-text3"><span class="nav-text">1. 编辑器: sublime text3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-编译器-tcc"><span class="nav-text">2. 编译器: tcc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-运行方式-cmd或cmder-conemu-可选-中运行"><span class="nav-text">3. 运行方式: cmd或cmder/conemu(可选)中运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-安装配置"><span class="nav-text">二. 安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-配置tcc"><span class="nav-text">1. 配置tcc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在sublime-text3中添加tcc编译系统"><span class="nav-text">2. 在sublime text3中添加tcc编译系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-测试运行"><span class="nav-text">3. 测试运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-其他问题"><span class="nav-text">4. 其他问题</span></a></li></ol></li></ol></div>
             
 
           </div>
