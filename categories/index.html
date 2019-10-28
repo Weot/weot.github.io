@@ -180,6 +180,10 @@
       </a>
     </div>
     
+      
+        <p class="site-subtitle">竹杖芒鞋轻胜马, 一蓑烟雨任平生</p>
+      
+    
     
   </div>
 
@@ -380,7 +384,7 @@
               目前共计 7 个分类
             </div>
             <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/办公学习/">办公学习</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/办公学习/财务工作/">财务工作</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/">编程开发</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/C语言/">C语言</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/网站开发/">网站开发</a><span class="category-list-count">1</span></li></ul></li></ul>
+              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/办公学习/">办公学习</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/办公学习/财务工作/">财务工作</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/">编程开发</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/C语言/">C语言</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/网站开发/">网站开发</a><span class="category-list-count">1</span></li></ul></li></ul>
             </div>
           </div>
         
@@ -402,6 +406,10 @@
           </div>
           
 
+  
+    <div id="gitalk-container">
+    </div>
+    
   
 
 
@@ -443,7 +451,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -761,6 +769,32 @@
 
 
 
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '15beca30ea9c95d1d9db',
+          clientSecret: '32efc21a96d9dabc732da089709b62ce53ec5210',
+          repo: 'git@github.com:Weot/weot_comment.git',
+          owner: 'Weot',
+          admin: ['Weot'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
 
 
   
