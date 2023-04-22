@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Python开发环境配置一. 安装Python Python2 还是 Python3 ?  这个问题现在其实不用太纠结, 选择则Python3就好了, 除非你是要运行之前的老项目.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python开发环境配置">
+<meta property="og:url" content="https://wangmaio.site/2019/01/25/Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="Python开发环境配置一. 安装Python Python2 还是 Python3 ?  这个问题现在其实不用太纠结, 选择则Python3就好了, 除非你是要运行之前的老项目.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/01Python%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C.jpg">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/02Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83.jpg">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/03ipython%E6%95%88%E6%9E%9C%E5%9B%BE.jpg">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/05Cmder%E6%95%88%E6%9E%9C%E5%9B%BE.jpg">
+<meta property="article:published_time" content="2019-01-25T10:39:48.000Z">
+<meta property="article:modified_time" content="2022-01-17T06:31:16.440Z">
+<meta property="article:author" content="Wang Miao">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="VS Code">
+<meta property="article:tag" content="Cmder">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangmaio.site/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/01Python%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C.jpg">
+
+
+<link rel="canonical" href="https://wangmaio.site/2019/01/25/Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2019/01/25/Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/","path":"2019/01/25/Python开发环境配置/","title":"Python开发环境配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python开发环境配置 | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">Python开发环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E5%AE%89%E8%A3%85Python"><span class="nav-number">1.1.</span> <span class="nav-text">一. 安装Python</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E8%BF%90%E8%A1%8CPython"><span class="nav-number">1.2.</span> <span class="nav-text">二. 运行Python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7-pip"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 使用包管理工具 pip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83-virtualenv"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 使用虚拟环境 virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8Ipython"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 使用Ipython</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E9%80%89%E6%8B%A9"><span class="nav-number">1.3.</span> <span class="nav-text">三. 开发工具选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.</span> <span class="nav-text">四. 其他问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2019/01/25/Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python开发环境配置 | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python开发环境配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-25 18:39:48" itemprop="dateCreated datePublished" datetime="2019-01-25T18:39:48+08:00">2019-01-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-01-17 14:31:16" itemprop="dateModified" datetime="2022-01-17T14:31:16+08:00">2022-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">编程开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Python开发环境配置"><a href="#Python开发环境配置" class="headerlink" title="Python开发环境配置"></a>Python开发环境配置</h1><h2 id="一-安装Python"><a href="#一-安装Python" class="headerlink" title="一. 安装Python"></a>一. 安装Python</h2><blockquote>
+<p>Python2 还是 Python3 ?</p>
+</blockquote>
+<p>这个问题现在其实不用太纠结, 选择则<code>Python3</code>就好了, 除非你是要运行之前的老项目.</p>
+<span id="more"></span>
+<ul>
+<li>首先, Python2只会停留在2.7版本, 不会再重大更新, Python3才是未来</li>
+<li>其次, python3默认支持Unicode, 很多工作会变得容易</li>
+<li>第三, 很多第三方库都已经支持了Python3</li>
+</ul>
+<p>Windows 下安装很简单,  <a target="_blank" rel="noopener" href="https://www.python.org/">Python 官网</a>下载安装包, 直接安装.</p>
+<p>安装完成后, 命令行窗口输入<code>python</code>, 就可以看到下面的效果了:</p>
+<p><img src="/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/01Python%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C.jpg" alt="Python运行效果图"> </p>
+<h2 id="二-运行Python"><a href="#二-运行Python" class="headerlink" title="二. 运行Python"></a>二. 运行Python</h2><p>经过安装之后, 应该可以愉快的开始我们的Python之旅了, 但是为了运行环境的良好, 我们还应该做一些优化工作.</p>
+<h3 id="1-使用包管理工具-pip"><a href="#1-使用包管理工具-pip" class="headerlink" title="1. 使用包管理工具 pip"></a>1. 使用包管理工具 pip</h3><p>Python核心库已经内置了一部分基本的功能包, 但是为了使用更多开发者开发的包, 例如用于数据分析的<code>Numpy</code>, <code>Pandas</code>, <code>Matplotlib</code>等包时, 我们就需要使用包管理工具来进行安装了, <code>pip</code>就是python中的包管理工具, 类似于<code>nodejs</code>中的<code>npm</code></p>
+<h4 id="1-1-基本配置"><a href="#1-1-基本配置" class="headerlink" title="1.1 基本配置"></a>1.1 基本配置</h4><p>pip默认会使用官方的源, 在国内下载速度不是很好, 因此可以配置国内镜像, 提高下载速度</p>
+<p>三种顺序的配置</p>
+<ol>
+<li>site-wide 配置文件位置: <code>C:\ProgramData\pip\pip.ini</code>or<code>/etc/xdg/pip/pip.conf</code></li>
+<li>per-user 配置文件位置: <code>%APPDATA%\pip\pip.ini</code>或者<code>%HOME%/pip/pip.conf</code></li>
+<li>virtualenv 配置文件位置: <code>%VIRTUAL_ENV%\pip.ini</code></li>
+</ol>
+<p>如果, 在以上位置没有找到<code>pip.ini</code>文件, 可以自己在任意位置创建一个, 然后设置环境变量<code>PIP_CONFIG_FILE</code>指向该文件, 文件内容为:</p>
+<p><code>pip.ini</code> or <code>pip.conf</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">index-url = https://pypi.douban.com/simple</span><br></pre></td></tr></table></figure>
+
+<p>pipy国内镜像目前有：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://pypi.douban.com/">http://pypi.douban.com/</a>  豆瓣</li>
+<li><a target="_blank" rel="noopener" href="http://pypi.hustunique.com/">http://pypi.hustunique.com/</a>  华中理工大学</li>
+<li><a target="_blank" rel="noopener" href="http://pypi.sdutlinux.org/">http://pypi.sdutlinux.org/</a>  山东理工大学</li>
+<li><a target="_blank" rel="noopener" href="http://pypi.mirrors.ustc.edu.cn/">http://pypi.mirrors.ustc.edu.cn/</a>  中国科学技术大学</li>
+</ul>
+<p>pip.ini文件中的地址可以上面的国内镜像地中任意选择一个</p>
+<p>需要注意的是, 在Ubuntu系统中, 配置文件名应为<code>pip.conf</code></p>
+<h4 id="1-2-pip的基本操作"><a href="#1-2-pip的基本操作" class="headerlink" title="1.2 pip的基本操作"></a>1.2 pip的基本操作</h4><p>最常用的命令是查看安装包和安装等</p>
+<h5 id="1-2-1-查看命令"><a href="#1-2-1-查看命令" class="headerlink" title="1.2.1 查看命令"></a>1.2.1 查看命令</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip list --format=columns  <span class="comment"># 显示安装的包列表</span></span><br><span class="line">pip list --format=legacy  <span class="comment"># 传统显示</span></span><br><span class="line">pip list --format=json  <span class="comment"># json方式显示 </span></span><br><span class="line">pip list --format=freeze  <span class="comment"># freeze命令形式显示 </span></span><br></pre></td></tr></table></figure>
+
+<h5 id="1-2-2-安装相关命令"><a href="#1-2-2-安装相关命令" class="headerlink" title="1.2.2 安装相关命令"></a>1.2.2 安装相关命令</h5><p>安装包, 有三种不同的形式供选择:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install SomePackage            <span class="comment"># latest version</span></span><br><span class="line">pip install SomePackage==1.0.4     <span class="comment"># specific version</span></span><br><span class="line">pip install <span class="string">&#x27;SomePackage&gt;=1.0.4&#x27;</span>     <span class="comment"># minimum version</span></span><br></pre></td></tr></table></figure>
+<p>从<code>wheels</code>文件安装包:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install SomePackage-1.0-py2.py3-none-any.whl</span><br></pre></td></tr></table></figure>
+
+<p>利用<code>requirement.txt</code>安装包:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p><code>requirement.txt</code>是一个指定依赖包的文件, 可以很方便的下载所以的依赖包, 可以利用<code>pip</code>的命令很快的生成这个依赖文件, 在部署应用的时候应该经常用到:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirement.txt</span><br></pre></td></tr></table></figure>
+
+
+<p>删除包命令:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall SomePackage</span><br></pre></td></tr></table></figure>
+
+<p>更多命令, 参考pip<a target="_blank" rel="noopener" href="https://pip.pypa.io/en/stable/reference/">官方文档</a></p>
+<h3 id="2-使用虚拟环境-virtualenv"><a href="#2-使用虚拟环境-virtualenv" class="headerlink" title="2. 使用虚拟环境 virtualenv"></a>2. 使用虚拟环境 virtualenv</h3><blockquote>
+<p>为什么要使用虚拟环境? 虚拟环境virtualenv可以为不同的项目生成一个个隔离运行的环境, 防止不同版本依赖问题, 便于管理</p>
+</blockquote>
+<h4 id="2-1-安装virtualenv包"><a href="#2-1-安装virtualenv包" class="headerlink" title="2.1 安装virtualenv包"></a>2.1 安装virtualenv包</h4><p>默认的python3环境没有安装virtualenv工具, 可以通过<code>pip</code>命令进行安装:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-创建虚拟环境"><a href="#2-2-创建虚拟环境" class="headerlink" title="2.2 创建虚拟环境"></a>2.2 创建虚拟环境</h4><p>在你喜欢的位置新建一个文件夹, 用来存放虚拟环境就可以了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virtualenv --no-site-packages myflask</span><br></pre></td></tr></table></figure>
+<p>上述命令之后, 会在你的文件夹下产生一个<code>myflask</code>文件夹, 里面就是名为myflask的虚拟环境</p>
+<h4 id="2-3-激活虚拟环境"><a href="#2-3-激活虚拟环境" class="headerlink" title="2.3 激活虚拟环境"></a>2.3 激活虚拟环境</h4><p>windows环境:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./venv/myflask/Scripts/activate</span><br></pre></td></tr></table></figure>
+<p>linux环境:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /venv/myflask/Scripts/activate</span><br></pre></td></tr></table></figure>
+<p>激活虚拟环境后, 命令行前面会显示出当前所处的虚拟环境名称, 效果如下面所示:</p>
+<p><img src="/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/02Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83.jpg" alt="Python虚拟环境"></p>
+<h4 id="2-4-使用虚拟环境过程中的问题"><a href="#2-4-使用虚拟环境过程中的问题" class="headerlink" title="2.4 使用虚拟环境过程中的问题"></a>2.4 使用虚拟环境过程中的问题</h4><p>有些包无法用pip直接下载, 可以把下载下来的.exe安装包文件, 放在一定的位置, 然后用<code>easy_install</code>命令进行安装</p>
+<h4 id="2-5-离开虚拟环境"><a href="#2-5-离开虚拟环境" class="headerlink" title="2.5 离开虚拟环境"></a>2.5 离开虚拟环境</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+
+<p>更多关于virtualenv的内容, 参考<a target="_blank" rel="noopener" href="https://virtualenv.pypa.io/en/stable/">官方文档</a></p>
+<h3 id="3-使用Ipython"><a href="#3-使用Ipython" class="headerlink" title="3. 使用Ipython"></a>3. 使用Ipython</h3><p>Ipython 极大的丰富了原生Python交互命令行的的内容, 可以显示每次输入输出的行号, 可以记录命令历时, 高亮代码, 并且内置了魔法函数, 对于日常开发非常有帮助. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install ipython</span><br></pre></td></tr></table></figure>
+<p>安装完成后, 命令行直接输入<code>ipython</code>就可以使用了, 效果如图:</p>
+<p><img src="/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/03ipython%E6%95%88%E6%9E%9C%E5%9B%BE.jpg" alt="ipython效果图"></p>
+<h2 id="三-开发工具选择"><a href="#三-开发工具选择" class="headerlink" title="三. 开发工具选择"></a>三. 开发工具选择</h2><p>对于开发工具的选择, 历来有很多不同的争辩, 其实最重要的就是选择自己能用顺手的, 能够提高生产力的. </p>
+<p>在最开始学习Python的时候, 选择了Pycharm, 功能非常完备, 对于之前用过Eclipse来说, 太好用了. 但是不知道是电脑配置的原因还是, Pycharm的打开速度实在是有点慢, 接着又发现了<code>Sumlime Text3</code>, 感觉像发现了新世界, 打开速度快, 跟打开记事本速度差不多, 颜值又高, 插件又非常多. 接着又发现了微软出的<code>VS Code</code>, 一开始以为是集成开发工具, 没有太关注, 后来发现是一个类似<code>Sublime Text3</code>一样的编辑器, 并且还是开源的, 可以免费使用. 中间也试过<code>Atom</code>, 速度上感觉不行, 就没有用了.</p>
+<ol>
+<li>VS Code</li>
+<li>Sublime Text3</li>
+<li>Atom</li>
+<li>Pycharm</li>
+</ol>
+<p>综上, 如果是想选择一个集成的开发工具, 建议试用<code>Pycharm</code></p>
+<p>如果想要一个轻便的工具, 建议选择<code>VS Code</code>或者<code>Sublime Text3</code></p>
+<p>![VS Code效果图](/images/2019-01-25-Python开发环境配置/04VS Code效果图.jpg)</p>
+<p>另外, 推荐一个windows命令行增强工具<a target="_blank" rel="noopener" href="http://cmder.net/"><code>Cmder</code></a>, 优点主要如下:</p>
+<ul>
+<li>颜值高, 字体等都可以自定义</li>
+<li>可以记录命令历史</li>
+<li>可以使用别名(路径不同, 长命令时候特别有用)</li>
+<li>安装Git后还可以使用Linux下的一些命令</li>
+</ul>
+<p><img src="/images/2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/05Cmder%E6%95%88%E6%9E%9C%E5%9B%BE.jpg" alt="Cmder效果图"></p>
+<h2 id="四-其他问题"><a href="#四-其他问题" class="headerlink" title="四. 其他问题"></a>四. 其他问题</h2><p>在windows下, 有些包不能直接通过pip下载官网的包, 比如<code>scipy</code>,  可以在这个<a target="_blank" rel="noopener" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">地址</a>, 找到相应的包, 下载安装就可以了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/VS-Code/" rel="tag"># VS Code</a>
+              <a href="/tags/Cmder/" rel="tag"># Cmder</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/01/11/Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/" rel="prev" title="Python爬虫实例(MOHRE)">
+                  <i class="fa fa-chevron-left"></i> Python爬虫实例(MOHRE)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/18/%E6%9D%90%E6%96%99%E6%A0%B8%E7%AE%97/" rel="next" title="材料核算">
+                  材料核算 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1176dd33f7725730d92c6ab3d6a42c02"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

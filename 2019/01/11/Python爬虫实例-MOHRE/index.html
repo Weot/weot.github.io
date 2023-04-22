@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Python爬虫实例(MOHRE)[toc] 一. 概述 由于工作需要, 每过一段时间, 需要在阿联酋移民局的网站上检查某一人员是否在系统中, 而系统中人名是按字母序排列的, 找到一个人往往需要很多次翻页. 所以, 为了能够检索所有的劳工卡信息, 我们想要每次都把公司的所有雇员信息下载下来.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python爬虫实例(MOHRE)">
+<meta property="og:url" content="https://wangmaio.site/2019/01/11/Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="Python爬虫实例(MOHRE)[toc] 一. 概述 由于工作需要, 每过一段时间, 需要在阿联酋移民局的网站上检查某一人员是否在系统中, 而系统中人名是按字母序排列的, 找到一个人往往需要很多次翻页. 所以, 为了能够检索所有的劳工卡信息, 我们想要每次都把公司的所有雇员信息下载下来.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/01%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/02%E6%8F%90%E4%BA%A4%E7%99%BB%E5%BD%95.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/03%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81%E9%A1%B5%E9%9D%A2.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/04%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/05%E5%91%98%E5%B7%A5%E5%88%97%E8%A1%A8%E9%A1%B5%E9%9D%A2.png">
+<meta property="article:published_time" content="2019-01-11T04:51:03.000Z">
+<meta property="article:modified_time" content="2022-01-17T06:31:21.056Z">
+<meta property="article:author" content="Wang Miao">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="Scrapy">
+<meta property="article:tag" content="spider">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/01%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png">
+
+
+<link rel="canonical" href="https://wangmaio.site/2019/01/11/Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2019/01/11/Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/","path":"2019/01/11/Python爬虫实例-MOHRE/","title":"Python爬虫实例(MOHRE)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python爬虫实例(MOHRE) | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE"><span class="nav-number">1.</span> <span class="nav-text">Python爬虫实例(MOHRE)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">一. 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E5%87%86%E5%A4%87%E5%B7%A5%E5%85%B7"><span class="nav-number">1.2.</span> <span class="nav-text">二. 准备工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-scrapy"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. scrapy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-requests"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. requests</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-lxml-html-etree"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. lxml.html.etree</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E7%88%AC%E5%8F%96%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">三. 爬取步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%99%BB%E5%BD%95%E9%AA%8C%E8%AF%81%E5%A4%84%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 登录验证处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 页面解析</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2019/01/11/Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python爬虫实例(MOHRE) | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python爬虫实例(MOHRE)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-11 12:51:03" itemprop="dateCreated datePublished" datetime="2019-01-11T12:51:03+08:00">2019-01-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-01-17 14:31:21" itemprop="dateModified" datetime="2022-01-17T14:31:21+08:00">2022-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">编程开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Python爬虫实例-MOHRE"><a href="#Python爬虫实例-MOHRE" class="headerlink" title="Python爬虫实例(MOHRE)"></a>Python爬虫实例(MOHRE)</h1><p>[toc]</p>
+<h2 id="一-概述"><a href="#一-概述" class="headerlink" title="一. 概述"></a>一. 概述</h2><blockquote>
+<p>由于工作需要, 每过一段时间, 需要在阿联酋移民局的网站上检查某一人员是否在系统中, 而系统中人名是按字母序排列的, 找到一个人往往需要很多次翻页. 所以, 为了能够检索所有的劳工卡信息, 我们想要每次都把公司的所有雇员信息下载下来. </p>
+</blockquote>
+<span id="more"></span>
+<p>MOHRE(The Ministry of Human Resources and Emiratisation), 中文阿联酋人力资源与移民局, 要获取公司的雇员信息, 首先要用公司的账户进行登录, 登录后回答相应的提示问题, 再跳转到雇员信息页面, 再解析页面上的信息就可以得到我们想要的数据了. </p>
+<p>登录验证 -&gt; 问题验证 -&gt; 数据提取</p>
+<blockquote>
+<p>如何完成登录验证?</p>
+</blockquote>
+<p>借助requests库, 模拟发送请求, 完成两次验证, 返回相应的Cookie值.</p>
+<blockquote>
+<p>如何解析页面?</p>
+</blockquote>
+<p>python有成熟的第三方数据爬取的库<code>scrapy</code>, 可以很方便的利用scrapy完成页面的解析及提取工作.</p>
+<h2 id="二-准备工具"><a href="#二-准备工具" class="headerlink" title="二. 准备工具"></a>二. 准备工具</h2><h3 id="1-scrapy"><a href="#1-scrapy" class="headerlink" title="1. scrapy"></a>1. scrapy</h3><blockquote>
+<p>scrapy是一个为爬虫应用而生的应用框架, 能够用来解析所有结构化得页面.</p>
+</blockquote>
+<p>详细的参考说明可以参见 <a target="_blank" rel="noopener" href="https://doc.scrapy.org/en/master/">scrapy官网</a></p>
+<ol>
+<li>下载安装</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建爬虫项目</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject mohre</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>编写核心程序(位于spider下面)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mohre/</span><br><span class="line">    scrapy.cfg            # deploy configuration file</span><br><span class="line"></span><br><span class="line">    mohre/             # project&#x27;s Python module, you&#x27;ll import your code from here</span><br><span class="line">        __init__.py</span><br><span class="line"></span><br><span class="line">        items.py          # project items definition file</span><br><span class="line"></span><br><span class="line">        middlewares.py    # project middlewares file</span><br><span class="line"></span><br><span class="line">        pipelines.py      # project pipelines file</span><br><span class="line"></span><br><span class="line">        settings.py       # project settings file</span><br><span class="line"></span><br><span class="line">        spiders/          # a directory where you&#x27;ll later put your spiders</span><br><span class="line">            __init__.py</span><br><span class="line">            </span><br><span class="line">            cookie.py     # the module you put the get_cookie function</span><br><span class="line"></span><br><span class="line">            labour.py     # core spider file </span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>运行爬虫程序, 输出到<code>csv</code>文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl emp -o emplist.csv</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-requests"><a href="#2-requests" class="headerlink" title="2. requests"></a>2. requests</h3><p>requests有非常好用的模拟发送请求的函数, 这里我们用来完成两次验证</p>
+<p>安装方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install requests</span><br></pre></td></tr></table></figure>
+
+<p>requests 的使用方法易于理解, 详细的用法可以参考 <a target="_blank" rel="noopener" href="http://www.python-requests.org/en/master/">requests官网</a></p>
+<p>我们要用的主要功能有:</p>
+<ol>
+<li><code>request.session</code>功能</li>
+<li><code>session.get(url)</code></li>
+<li><code>seesion.post(url, data, heders)</code></li>
+</ol>
+<h3 id="3-lxml-html-etree"><a href="#3-lxml-html-etree" class="headerlink" title="3. lxml.html.etree"></a>3. lxml.html.etree</h3><p>scrapy本身带了解析HTML页面的能力, 但是我们在获取登录cookie的时候, 我们只能先借助requests库发送请求, 再利用lxml.html.etree来解析返回的页面</p>
+<p>详细的用法见<a target="_blank" rel="noopener" href="https://lxml.de/lxmlhtml.html">官网</a></p>
+<p>我们这里用的功能其实与scrapy中的css选择器大致相同, 函数的用法有稍许的不同.</p>
+<h2 id="三-爬取步骤"><a href="#三-爬取步骤" class="headerlink" title="三. 爬取步骤"></a>三. 爬取步骤</h2><p>总的步骤可以分为两部分, 一部分负责登录验证cookie的获取, 另一部分负责解析及生成所需数据.</p>
+<h3 id="1-登录验证处理"><a href="#1-登录验证处理" class="headerlink" title="1. 登录验证处理"></a>1. 登录验证处理</h3><p>首先, 分析登录页面的结构及登录时所需提交的数据.</p>
+<p>登录页面效果如下:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/01%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png" alt="登录页面"></p>
+<p>下面是登录页面的HTML结构, 可以看到表单中有几个隐藏中的参数, 后面模拟验证登录会用到</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">&quot;frmLogin&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;./login.aspx?lang=eng&quot;</span> <span class="attr">onsubmit</span>=<span class="string">&quot;javascript:return WebForm_OnSubmit();&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">id</span>=<span class="string">&quot;frmLogin&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__EVENTTARGET&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__EVENTTARGET&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__EVENTARGUMENT&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__EVENTARGUMENT&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__VIEWSTATE&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__VIEWSTATE&quot;</span> <span class="attr">value</span>=<span class="string">&quot;/wEPDwULLTE2ODcyMDQ2MDUPZBYCAgEPZBYUAhkPFgIeCWlubmVyaHRtbAVuPGEgaHJlZj0nU1NPUmVkaXJlY3QuYXNweD9BcHBJRD1OVFdTTCc+PGltZyBzcmM9J0ltYWdlcy9TbWFydFBhc3MuanBnJyBzdHlsZT0naGVpZ2h0OjQ2cHg7IHdpZHRoOjIwMHB4OycvPjwvYT5kAhsPDxYCHgRUZXh0BQgxMDgzNzMxM2RkAh0PDxYCHwEFBTExNDg2ZGQCHw8PFgIfAQUGMTI5MzI4ZGQCIQ8PFgIfAQUGNDg0NDkxZGQCLQ8PZBYCHgdPbkNsaWNrBR1KYXZhU2NyaXB0OnJldHVybiB2YWxpZGF0ZSgpO2QCMw8PFgIfAQUoV2hhdCBpcyB5b3VyIG9waW5pb24gYWJvdXQgdGhpcyB3ZWJzaXRlP2RkAjcPDxYCHwEFCUV4Y2VsbGVudGRkAjsPDxYCHwEFBEdvb2RkZAI/Dw8WAh8BBQhBY2NlcHRlZGRkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYFBQZyZEFuczEFBnJkQW5zMgUGcmRBbnMyBQZyZEFuczMFBnJkQW5zM4ZFlmWhclpng5Sf6MKt0EhdY/oPz6kkgQDpa5/C8D8N&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__VIEWSTATEGENERATOR&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__VIEWSTATEGENERATOR&quot;</span> <span class="attr">value</span>=<span class="string">&quot;0428CBE9&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__EVENTVALIDATION&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__EVENTVALIDATION&quot;</span> <span class="attr">value</span>=<span class="string">&quot;/wEdABYIEPM8/T91XneGPQ1SRtM79blI3CMu38DZhvtVg0A1jAchBDsGRG9ZfJOBdKkCF4EU9J1w2sKBHROFXnqIDBMatlx55RwyllFnTGO/io4DWWN6ZYJNGAQHn0c9zMgZU3B2NvjHOkq5wKoqN6Aim8WG8tE4qI7UAUU9EOLUxz/cCPKFQvO1JfZiM1HVv+DKjoszHc/H4FBVzxWkc9VezzQN5IN6oJBlk11msy36jadMlKM6CWabl8ZKTlSSkWx8rh5DB2YfWbjwUYntrwPx36ESX7JzMDb/wVJ9mJ810Q97izzmltaUM7aEAN+g9cP/m13hgAAu9je581zBbk7c4sh+d7RnisS1PiyBpYEMF6nUbLTE/53XZug13ygX1VEAZiC3zEBk0+CrJ9JH/kfsOtYKEEiEoCtJLWPQasqn4dMVICA5ToeEaIY8FsTKJAoH286KnJAu6CKHUdY9glvBwFvvI4R2XFuv+NyO10+mp1xBQOcgAVsosM3pxA/Mw/Sd53Q=&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;textbox-wap&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;username&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;txtUserName&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;txtUserName&quot;</span> <span class="attr">autocomplete</span>=<span class="string">&quot;off&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;password&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;txtPassword&quot;</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">id</span>=<span class="string">&quot;txtPassword&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">&quot;lbtnForgotPass&quot;</span> <span class="attr">href</span>=<span class="string">&quot;javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="symbol">&amp;quot;</span>lbtnForgotPass<span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, true, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, false, true))&quot;</span>&gt;</span>Forgot</span><br><span class="line">        Password /Security Question?<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;flexbox&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;cmdlogin&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Submit&quot;</span> <span class="attr">onclick</span>=<span class="string">&quot;javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="symbol">&amp;quot;</span>cmdlogin<span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, true, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, false, false))&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">id</span>=<span class="string">&quot;cmdlogin&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-primary&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">&quot;lbtnNewEmployee&quot;</span> <span class="attr">href</span>=<span class="string">&quot;javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="symbol">&amp;quot;</span>lbtnNewEmployee<span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, true, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, false, true))&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">style</span>=<span class="string">&quot;display: none&quot;</span>&gt;</span>New Employees Signup here<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">&quot;lbtnNewUser&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-default&quot;</span> <span class="attr">href</span>=<span class="string">&quot;javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="symbol">&amp;quot;</span>lbtnNewUser<span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, true, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, <span class="symbol">&amp;quot;</span><span class="symbol">&amp;quot;</span>, false, true))&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">style</span>=<span class="string">&quot;display: block&quot;</span>&gt;</span>New Owners Signup here<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是截取提交登录的过程中传递参数的截图:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/02%E6%8F%90%E4%BA%A4%E7%99%BB%E5%BD%95.png" alt="提交登录"></p>
+<p>从图中可以看到, 提交了这些参数, 其中五个隐藏在页面中的参数和用户名密码是必须的, 其他的并不是很重要, 我们只要从页面中把这些提取出来, 连同用户名/密码一起提交, 就可以完成初步验证</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">__EVENTTARGET:                          // 隐藏在页面中的参数</span><br><span class="line">__EVENTARGUMENT:                        // 隐藏在页面中的参数</span><br><span class="line">__VIEWSTATE:/wEPDwULLTE2ODcyMDQ2MDUPZ   // 隐藏在页面中的参数</span><br><span class="line">__VIEWSTATEGENERATOR:0428CBE9           // 隐藏在页面中的参数</span><br><span class="line">__EVENTVALIDATION:/wEdABYIEPM8          // 隐藏在页面中的参数</span><br><span class="line">type:pages</span><br><span class="line">type:news</span><br><span class="line">type:events</span><br><span class="line">type:faqs</span><br><span class="line">type:service</span><br><span class="line">txtUserName:xxxxx                       // 提交的用户名</span><br><span class="line">txtPassword:xxxxx                       // 提交的密码</span><br><span class="line">cmdlogin:Submit</span><br><span class="line">txtName:</span><br><span class="line">txtEmail:</span><br><span class="line">txtComments:</span><br><span class="line">hdnComno:</span><br><span class="line">hdnStatus:</span><br><span class="line">gPoll:rdAns1</span><br><span class="line">hdnQuestion:1</span><br></pre></td></tr></table></figure>
+
+<p>由于需要问题验证, 此时虽然得到了一个cookie, 但不能够使用</p>
+<p>登录成功后, 会跳转到问题验证页面:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/03%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81%E9%A1%B5%E9%9D%A2.png" alt="问题验证页面"></p>
+<p>通过查看HTML代码, 可以看到问题验证其实是一个嵌套的iframe, iframe的代码如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">&quot;Form1&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;./SecurityQuestions.aspx?type=1<span class="symbol">&amp;amp;</span>lang=1<span class="symbol">&amp;amp;</span>userID=31416076573906&quot;</span> <span class="attr">id</span>=<span class="string">&quot;Form1&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">dir</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__VIEWSTATE&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__VIEWSTATE&quot;</span> <span class="attr">value</span>=<span class="string">&quot;/wEPDwUKMTQxNDM1NTI1MA9kFgJmD2QWAgIBD2QWBAIBD2QWAgIBD2QWAgIBDxYCHgdWaXNpYmxlaBYIAgEPZBYCAgEPZBYCAgEPEGRkFgBkAgIPZBYCAgEPZBYCAgEPDxYCHgRUZXh0ZWRkAgMPZBYCAgEPZBYCAgEPEGRkFgBkAgQPZBYCAgEPZBYCAgEPDxYCHwFlZGQCAg9kFgICAQ9kFgICAQ9kFgJmD2QWAgIBD2QWAgIBDw8WAh8BBRxXaGF0IGlzIHlvdXIgZmF2b3JpdGUgY29sb3I/ZGRkuJzrJR5MIM5THyFMd50eqEc04kTwDrO3Tzcd0PFrZF8=&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__VIEWSTATEGENERATOR&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__VIEWSTATEGENERATOR&quot;</span> <span class="attr">value</span>=<span class="string">&quot;823AD229&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__EVENTVALIDATION&quot;</span> <span class="attr">id</span>=<span class="string">&quot;__EVENTVALIDATION&quot;</span> <span class="attr">value</span>=<span class="string">&quot;/wEdAANl8JPPQXxJKQsyWwDBCkZVV8Br3qobb5+3aHdcJeGCPrDVG0sT6bnJexpzy9nEXAs8t74ulrfzb3d6yyS2rJN22uCgqMPvpf5FOWKcxsKEpQ==&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span>&gt;</span></span><br><span class="line">        关于问题回答表单的代码</span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同样的, 这个表单中也包含几个隐藏的参数, 将答案及隐藏的参数一块提交给验证的网址, 正常浏览器会利用返回的页面中的js代码完成进一步的验证<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/04%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81.png" alt="问题验证"></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__VIEWSTATE:/wEPDwUKMTQxN</span><br><span class="line">__VIEWSTATEGENERATOR:823AD229</span><br><span class="line">__EVENTVALIDATION:/wEdAANqj5rO+kwNDHGx2wX65AqaV8Br3qobb5+3aHdcJeGCPrDVG0sT6bnJexpzy9nEXAuhYPLXGl4byF9gCESzBlRvnGAMVw6dJs7rTLonqZC/Cg==</span><br><span class="line">txtAnswer:GREEN</span><br><span class="line">btnSubmit2:Submit</span><br></pre></td></tr></table></figure>
+<p>提交问题返回的js代码会包含安全验证的tkn码, 在利用验证网址组合tkn码进行get请求, 至此安全验证, 现在提取cookie, 就可以使用了<br>完整的获取cookie代码如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml.html <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_cookie</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    获取登录用的Cookie</span></span><br><span class="line"><span class="string">    1. 通过解析登录页面, 提交账户密码及一些其他隐藏在页面中的参数, 获取cookie;</span></span><br><span class="line"><span class="string">    此时获取的Cookie不是能够直接使用, 还需要通过问题验证才可以使用</span></span><br><span class="line"><span class="string">    2. 利用第一步已经登录的session, 获取隐藏在二次验证的页面中的iframe问题验证页面, 通过提交问题及其他隐藏校验信息,</span></span><br><span class="line"><span class="string">    返回校验成功的页面, 此时页面中含有一个包含的tkn信息</span></span><br><span class="line"><span class="string">    3. 正常的浏览器界面在验证问题后转向一个登陆成功后的公司用户信息主页面, 通过分析第二步的验证页面, 可以知道,</span></span><br><span class="line"><span class="string">    页面的跳转是通过JS实现的, JS中包含的tkn信息和用户ID, 作为二次验证的参数, GET提交得到跳转的页面, 此时的cookie就可以正常使用了</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        Dict: 完成验证的Cookie字典</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 登录用的地址</span></span><br><span class="line">    login_url = <span class="string">&#x27;https://eservices.mohre.gov.ae/enetwasal/login.aspx?lang=eng&#x27;</span></span><br><span class="line">    <span class="comment"># 二次验证的地址</span></span><br><span class="line">    auth_url = <span class="string">&#x27;https://eservices.mohre.gov.ae/enetwasal/SecurityAuthentication.aspx?type=1&#x27;</span></span><br><span class="line">    <span class="comment"># 获取问题验证的地址, 这里直接把UserID参数硬编码进去了</span></span><br><span class="line">    question_url = <span class="string">&#x27;https://eservices.mohre.gov.ae/enetwasal/SecurityQuestions.aspx?type=1&amp;lang=1&amp;userID=31416076573906&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用requests的session功能</span></span><br><span class="line">    session = requests.session()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取登录页面, 并用etree.HTML进行解析</span></span><br><span class="line">    r_login = session.get(login_url)</span><br><span class="line">    page = etree.HTML(r_login.text)</span><br><span class="line">    <span class="comment"># 解析隐藏在页面中的登录需要的参数信息</span></span><br><span class="line">    view_state = page.cssselect(<span class="string">&#x27;input#__VIEWSTATE&#x27;</span>)[<span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    view_state_generator = page.cssselect(<span class="string">&#x27;input#__VIEWSTATEGENERATOR&#x27;</span>)[</span><br><span class="line">        <span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    event_validation = page.cssselect(<span class="string">&#x27;input#__EVENTVALIDATION&#x27;</span>)[</span><br><span class="line">        <span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    hdn_question = page.cssselect(<span class="string">&#x27;input#hdnQuestion&#x27;</span>)[<span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    <span class="comment"># 构造登录需要的POST参数信息</span></span><br><span class="line">    formdata = &#123;</span><br><span class="line">        <span class="string">&#x27;__EVENTTARGET&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;__EVENTARGUMENT&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;__VIEWSTATE&#x27;</span>: view_state,</span><br><span class="line">        <span class="string">&#x27;__VIEWSTATEGENERATOR&#x27;</span>: view_state_generator,</span><br><span class="line">        <span class="string">&#x27;__EVENTVALIDATION&#x27;</span>: event_validation,</span><br><span class="line">        <span class="string">&#x27;txtUserName&#x27;</span>: <span class="string">&#x27;xxxxxx&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;txtPassword&#x27;</span>: <span class="string">&#x27;xxxxxx&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;cmdlogin&#x27;</span>: <span class="string">&#x27;Submit&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;txtName&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;txtEmail&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;txtComments&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;hdnComno&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;hdnStatus&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;gPoll&#x27;</span>: <span class="string">&#x27;rdAns1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;hdnQuestion&#x27;</span>: hdn_question</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 构造USE-Agent头信息, 防止被网站屏蔽掉</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 提交登录信息, 问题验证的地址, 验证回调的二次验证也会在这里面返回</span></span><br><span class="line">    r_after_login = session.post(login_url, data=formdata, headers=headers)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用登录后的session获取问题验证页面</span></span><br><span class="line">    r_question = session.get(question_url)</span><br><span class="line">    <span class="comment"># 使用etree解析页面, 获取隐藏的参数信息</span></span><br><span class="line">    page = etree.HTML(r_question.text)</span><br><span class="line">    view_state = page.cssselect(<span class="string">&#x27;input#__VIEWSTATE&#x27;</span>)[<span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    view_state_generator = page.cssselect(<span class="string">&#x27;input#__VIEWSTATEGENERATOR&#x27;</span>)[</span><br><span class="line">        <span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    event_validation = page.cssselect(<span class="string">&#x27;input#__EVENTVALIDATION&#x27;</span>)[</span><br><span class="line">        <span class="number">0</span>].attrib[<span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">    <span class="comment"># 获取问题, 并判断是两个问题中的哪一个, 再给出相应的问题</span></span><br><span class="line">    question = page.cssselect(<span class="string">&#x27;span#lblQuestionValue&#x27;</span>)[<span class="number">0</span>].text</span><br><span class="line">    answer = <span class="string">&#x27;GREEN &#x27;</span> <span class="keyword">if</span> <span class="string">&#x27;color&#x27;</span> <span class="keyword">in</span> question <span class="keyword">else</span> <span class="string">&#x27;Pakistan&#x27;</span></span><br><span class="line">    <span class="comment"># 构造问题验证提交参数</span></span><br><span class="line">    formdata = &#123;</span><br><span class="line">        <span class="string">&#x27;__VIEWSTATE&#x27;</span>: view_state,</span><br><span class="line">        <span class="string">&#x27;__VIEWSTATEGENERATOR&#x27;</span>: view_state_generator,</span><br><span class="line">        <span class="string">&#x27;__EVENTVALIDATION&#x27;</span>: event_validation,</span><br><span class="line">        <span class="string">&#x27;txtAnswer&#x27;</span>: answer,</span><br><span class="line">        <span class="string">&#x27;btnSubmit2&#x27;</span>: <span class="string">&#x27;Submit&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 提交问题验证信息</span></span><br><span class="line">    r_after_question = session.post(</span><br><span class="line">        question_url, data=formdata, headers=headers)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取验证页面后的返回页面, 并解析其中的JS跳转信息中的tkn信息</span></span><br><span class="line">    page = etree.HTML(r_after_question.text)</span><br><span class="line">    js = page.cssselect(<span class="string">&#x27;script&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">    tkn = js.text.split(<span class="string">&quot;&#x27;&quot;</span>)[<span class="number">1</span>]</span><br><span class="line">    <span class="comment"># 构造出二次验证的地址, 并直接获取页面完成验证</span></span><br><span class="line">    new_auth_url = auth_url + tkn</span><br><span class="line">    r_auth = session.get(new_auth_url)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 解析出字典形式的cookie信息并返回</span></span><br><span class="line">    cookie = session.cookies.get_dict()</span><br><span class="line">    <span class="keyword">return</span> cookie</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-页面解析"><a href="#2-页面解析" class="headerlink" title="2. 页面解析"></a>2. 页面解析</h3><p>登录后的员工列表页面会有250条人员信息, 并且是分页显示的:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/05%E5%91%98%E5%B7%A5%E5%88%97%E8%A1%A8%E9%A1%B5%E9%9D%A2.png" alt="员工列表页面"></p>
+<p>这个爬虫的核心部分, 就是利用上面的获取cookie函数, 作初始化, 进入员工列表页面, 解析页面结构, 并提交下一页请求.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">一个爬取阿联酋移民与劳工局上本公司劳工卡信息的爬虫</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> .cookie <span class="keyword">import</span> get_cookie</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EmpSpider</span>(scrapy.Spider):</span><br><span class="line">    name = <span class="string">&#x27;emp&#x27;</span></span><br><span class="line">    allowed_domains = [<span class="string">&#x27;eservices.mohre.gov.ae&#x27;</span>]</span><br><span class="line">    <span class="comment"># 包含雇员信息的页面, 每页可以显示250条信息</span></span><br><span class="line">    start_urls = [</span><br><span class="line">        <span class="string">&#x27;https://eservices.mohre.gov.ae/enetwasal/rptComEmpList.aspx?comno=587582&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用get_cookie函数获取有效cookie, 使用cookie请求雇员详细信息页面</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">start_requests</span>(<span class="params">self</span>):</span><br><span class="line">        request = scrapy.Request(</span><br><span class="line">            self.start_urls[<span class="number">0</span>],</span><br><span class="line">            callback=self.parse,</span><br><span class="line">            cookies=get_cookie()</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">yield</span> request</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse</span>(<span class="params">self, response</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;解析页面, 生成结果信息</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        Arguments:</span></span><br><span class="line"><span class="string">            response &#123;scrapy.Response&#125; -- 请求页面返回的页面</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 在员工信息列表页面点击下一页的过程中, 实际是触发了一个JS事件,</span></span><br><span class="line">        <span class="comment"># js会通过隐藏在页面中的一些参数值向服务器请求下一页</span></span><br><span class="line">        <span class="comment"># 通过对每一次请求及返回页面源码的查看, 可以知道每次请求, </span></span><br><span class="line">        <span class="comment"># 有三个状态及验证信息的字段, 两个名字字段, 应该是标记位置用的, </span></span><br><span class="line">        <span class="comment"># 另外代表下一页还上一页的的一个信息</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 从页面提取三个验证字段</span></span><br><span class="line">        view_state = response.css(</span><br><span class="line">            <span class="string">&#x27;input#__VIEWSTATE::attr(value)&#x27;</span>).extract_first()</span><br><span class="line">        view_state_generator = response.css(</span><br><span class="line">            <span class="string">&#x27;input#__VIEWSTATEGENERATOR::attr(value)&#x27;</span>).extract_first()</span><br><span class="line">        event_validation = response.css(</span><br><span class="line">            <span class="string">&#x27;input#__EVENTVALIDATION::attr(value)&#x27;</span>).extract_first()</span><br><span class="line">        <span class="comment"># 从页面提取两个关于人名的字段, 标记上一页的的字段可能为空,</span></span><br><span class="line">        <span class="comment"># 两个名字相同时候, 说明已经是最后一页了, 本次请求得到的页面其实是重复的</span></span><br><span class="line">        <span class="comment"># 所以这里提前提取, 为的是首先判断页面是已经爬取过, 如果相同就可以终止了</span></span><br><span class="line">        hdnNextCardName = response.css(</span><br><span class="line">            <span class="string">&#x27;input#hdnNextCardName::attr(value)&#x27;</span>).extract_first() <span class="keyword">or</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        hdnPreviousCardName = response.css(</span><br><span class="line">            <span class="string">&#x27;input#hdnPreviousCardName::attr(value)&#x27;</span>).extract_first() <span class="keyword">or</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 根据两个名字相关的字段, 判断是否已经爬完所有页面, 是否终止爬虫</span></span><br><span class="line">        <span class="keyword">if</span> hdnNextCardName != hdnPreviousCardName:</span><br><span class="line">            <span class="comment"># 提取页面中的数据, 主要是对页面结构的理解</span></span><br><span class="line">            <span class="comment"># 详细页面的结构其实是一个标题加上几条记录信息的样式</span></span><br><span class="line">            <span class="comment"># 详细信息所幸都包含在具有border属性的table中</span></span><br><span class="line">            <span class="comment"># table中的每条tr就是一行信息, 但是页面中有一个bug, 第一行居然是空的</span></span><br><span class="line">            <span class="comment"># 这样表头就存在每个table中第二行了, 然后我们选表头行tr的所有兄弟节点,</span></span><br><span class="line">            <span class="comment"># 就是每一条的人员信息了</span></span><br><span class="line">            <span class="comment"># 接着就是解析每一行的信息, 返回就可以了</span></span><br><span class="line">            <span class="keyword">for</span> emp <span class="keyword">in</span> response.css(<span class="string">&#x27;.reportBack table[border] tr:nth-child(2) ~ tr&#x27;</span>):</span><br><span class="line">                <span class="comment"># 每一行信息有6列(td), 有的列包含一个字段信息, 有的包含2-3个字段</span></span><br><span class="line">                <span class="comment"># 前4列都是包含一个字段, 提取再做一些调整及格式化就可以了</span></span><br><span class="line">                <span class="comment"># 第5列包含护照号和国籍两个字段</span></span><br><span class="line">                <span class="comment"># 第6列不太规整, 大部分包含三个字段, 卡号, 卡类型, 过期日期, 有的状态是正在处理中</span></span><br><span class="line">                <span class="comment"># 没有过期日期, 所以过期日期的字段采用负数索引, 选择最后一个字段 </span></span><br><span class="line">                <span class="keyword">yield</span> &#123;</span><br><span class="line">                    <span class="string">&quot;NO&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(1)::text&#x27;</span>).extract_first().strip(),</span><br><span class="line">                    <span class="string">&quot;PersonCode&quot;</span>: <span class="string">&quot;&#x27;&quot;</span> + emp.css(<span class="string">&#x27;td:nth-child(2)::text&#x27;</span>).extract_first().strip(),</span><br><span class="line">                    <span class="string">&quot;Name&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(3)::text&#x27;</span>).extract_first().strip().title(),</span><br><span class="line">                    <span class="string">&quot;Job&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(4)::text&#x27;</span>).extract_first().strip().title(),</span><br><span class="line">                    <span class="string">&quot;PassportNO&quot;</span>: <span class="string">&quot;&#x27;&quot;</span> + emp.css(<span class="string">&#x27;td:nth-child(5)::text&#x27;</span>).extract()[<span class="number">0</span>].replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">                    <span class="string">&quot;Nationlity&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(5)::text&#x27;</span>).extract()[<span class="number">1</span>].strip().title(),</span><br><span class="line">                    <span class="string">&quot;CardNO&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(6)::text&#x27;</span>).extract()[<span class="number">0</span>].strip(),</span><br><span class="line">                    <span class="string">&quot;CardType&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(6)::text&#x27;</span>).extract()[<span class="number">1</span>].strip(),</span><br><span class="line">                    <span class="string">&quot;ExpiryDate&quot;</span>: emp.css(<span class="string">&#x27;td:nth-child(6)::text&#x27;</span>).extract()[-<span class="number">1</span>].strip()</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 构造请求下一页的信息, button值为next代表请求下一页</span></span><br><span class="line">            formdata = &#123;</span><br><span class="line">                <span class="string">&#x27;__VIEWSTATE&#x27;</span>: view_state,</span><br><span class="line">                <span class="string">&#x27;__VIEWSTATEGENERATOR&#x27;</span>: view_state_generator,</span><br><span class="line">                <span class="string">&#x27;__EVENTVALIDATION&#x27;</span>: event_validation,</span><br><span class="line">                <span class="string">&#x27;hdnNextCardName&#x27;</span>: hdnNextCardName,</span><br><span class="line">                <span class="string">&#x27;hdnPreviousCardName&#x27;</span>: hdnPreviousCardName,</span><br><span class="line">                <span class="string">&#x27;hdnButtonClicked&#x27;</span>: <span class="string">&quot;next&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">yield</span> scrapy.FormRequest(self.start_urls[<span class="number">0</span>], formdata=formdata, callback=self.parse)</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
+              <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+              <a href="/tags/spider/" rel="tag"># spider</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/01/11/%E9%9D%99%E6%80%81%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA(GitHub%20Pages%20+%20Hexo)/" rel="prev" title="静态个人博客搭建(GitHub Pages + Hexo)">
+                  <i class="fa fa-chevron-left"></i> 静态个人博客搭建(GitHub Pages + Hexo)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/01/25/Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="Python开发环境配置">
+                  Python开发环境配置 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"0cb8e475b6050411609a0dcbd5518e7d"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
