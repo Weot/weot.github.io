@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="一. 安装python should I use Python 2 or Python 3 for my development activity?   Short version: Python 2.x is legacy, Python 3.x is the present and future of the language  python2还是python3, 官网上是这样说明的现在比较推">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python开发环境配置与部署">
+<meta property="og:url" content="https://wangmaio.site/2017/09/10/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2017-09-10-python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="一. 安装python should I use Python 2 or Python 3 for my development activity?   Short version: Python 2.x is legacy, Python 3.x is the present and future of the language  python2还是python3, 官网上是这样说明的现在比较推">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2a388dab1dc378ae.webp.jpg">
+<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2489a01f707ab906.webp.jpg">
+<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B237bebc5761110a0.jpg">
+<meta property="og:image" content="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2423a747e6d0c352.jpg">
+<meta property="article:published_time" content="2017-09-09T19:53:00.000Z">
+<meta property="article:modified_time" content="2018-11-09T07:18:00.000Z">
+<meta property="article:author" content="Wang Miao">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="环境">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Sublime Text3">
+<meta property="article:tag" content="cmder">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2a388dab1dc378ae.webp.jpg">
+
+
+<link rel="canonical" href="https://wangmaio.site/2017/09/10/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2017-09-10-python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2017/09/10/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2017-09-10-python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2/","path":"2017/09/10/编程开发-Python-2017-09-10-python开发环境配置与部署/","title":"python开发环境配置与部署"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>python开发环境配置与部署 | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E5%AE%89%E8%A3%85python"><span class="nav-number">1.</span> <span class="nav-text">一. 安装python</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-pip%E7%9A%84%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">二. pip的配置与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">1. 基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-pip%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">2. pip的基本操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83virtualenv"><span class="nav-number">3.</span> <span class="nav-text">三. 使用虚拟环境virtualenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85virtualenv%E5%8C%85"><span class="nav-number">3.1.</span> <span class="nav-text">1. 安装virtualenv包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">3.2.</span> <span class="nav-text">2. 创建虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%BF%80%E6%B4%BB%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">3.3.</span> <span class="nav-text">3. 激活虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.4.</span> <span class="nav-text">4. 使用虚拟环境过程中的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%A6%BB%E5%BC%80%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">3.5.</span> <span class="nav-text">5. 离开虚拟环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-%E4%BD%BF%E7%94%A8git"><span class="nav-number">4.</span> <span class="nav-text">四. 使用git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94-%E9%83%A8%E7%BD%B2flask%E5%BA%94%E7%94%A8%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8-pythonanywhere"><span class="nav-number">5.</span> <span class="nav-text">五. 部署flask应用到远程服务器(pythonanywhere)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD-%E9%99%84%E5%8A%A0%E5%86%85%E5%AE%B9"><span class="nav-number">6.</span> <span class="nav-text">六: 附加内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-number">6.1.</span> <span class="nav-text">1. 编辑器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-win%E4%B8%8B%E7%9A%84%E5%A2%9E%E5%BC%BA%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7"><span class="nav-number">6.2.</span> <span class="nav-text">2. win下的增强命令行工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8D%E5%AE%B9%E6%98%93%E5%AE%89%E8%A3%85%E7%9A%84python%E5%8C%85whl%E5%8C%85%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80"><span class="nav-number">6.3.</span> <span class="nav-text">3. 不容易安装的python包whl包下载地址</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2017/09/10/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2017-09-10-python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="python开发环境配置与部署 | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python开发环境配置与部署
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-10 03:53:00" itemprop="dateCreated datePublished" datetime="2017-09-10T03:53:00+08:00">2017-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2018-11-09 15:18:00" itemprop="dateModified" datetime="2018-11-09T15:18:00+08:00">2018-11-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">编程开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="一-安装python"><a href="#一-安装python" class="headerlink" title="一. 安装python"></a>一. 安装python</h2><blockquote>
+<p>should I use Python 2 or Python 3 for my development activity?</p>
+</blockquote>
+<blockquote>
+<p>Short version: Python 2.x is legacy, Python 3.x is the present and future of the language</p>
+</blockquote>
+<p>python2还是python3, 官网上是这样<a target="_blank" rel="noopener" href="https://wiki.python.org/moin/Python2orPython3">说明</a>的<br>现在比较推崇的是python3:</p>
+<span id="more"></span>    
+<ul>
+<li>首先, Python2只会停留在2.7版本, 不会再重大更新, Python3才是未来</li>
+<li>其次, python3默认支持Unicode, 很多工作会变得容易</li>
+<li>第三, 很多第三方库都已经支持了Python3</li>
+</ul>
+<blockquote>
+<p>windows下安装python36</p>
+</blockquote>
+<p>直接下载python安装包，安装即可</p>
+<blockquote>
+<p>centos 7下安装python36</p>
+</blockquote>
+<p>centos默认的python版本是python27, 安装python3的话需要自行下载编译安装</p>
+<ol>
+<li>官网下载源码文件 <pre class="line-numbers language-shll" data-language="shll"><code class="language-shll">weget https:&#x2F;&#x2F;www.python.org&#x2F;ftp&#x2F;python&#x2F;3.6.3&#x2F;Python-3.6.3.tar.xz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>解压缩文件 <pre class="line-numbers language-shll" data-language="shll"><code class="language-shll">xz -d Python-3.6.3.tar.xz
+tar xvf Python-3.6.3.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>编译安装 <pre class="line-numbers language-shll" data-language="shll"><code class="language-shll">sudo mkdir &#x2F;usr&#x2F;local&#x2F;python3  # 创建安装目录
+cd Python3.6.3
+sudo .&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;python3 --enable-optimizations
+sudo make
+sudo make install<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>替换默认的python27 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mv</span> /usr/bin/python /usr/bin/python.bak  <span class="token comment"># 备份默认的python链接</span>
+<span class="token function">sudo</span> <span class="token function">ln</span> <span class="token parameter variable">-s</span> /usr/local/python3/bin/python3.6 /usr/bin/python  <span class="token comment"># 使用python36作为默认版本</span>
+<span class="token function">sudo</span> <span class="token function">ln</span> <span class="token parameter variable">-s</span> /usr/local/python3/bin/pip3 /usr/bin/pip  <span class="token comment"># 添加pip的链接</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>centos 7下安装后yum命令无法使用问题</p>
+</blockquote>
+</li>
+</ol>
+<p>原来的脚本中yum有关的脚本中由于使用的python2, 更换python3后无法使用，需要修改脚本文件指向原来的python27<br>需要更改的文件：</p>
+<pre><code>1./usr/bin/yum
+2./usr/libexec/urlgrabber-ext-down
+</code></pre>
+<p>遇到其他有关python出现的问题，修改相应的文件即可</p>
+<blockquote>
+<p>centos 7编译安装后使用pip出现错误(centos 7下先看此步骤)</p>
+</blockquote>
+<p>错误提示:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip is configured with locations that require TLS/SSL, however the ssl module <span class="token keyword">in</span> Python is not available.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>解决方法:</p>
+<ol>
+<li>安装<code>openssl-devel</code> <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> openssl-devel <span class="token parameter variable">-y</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>重新编译安装python</li>
+</ol>
+<blockquote>
+<p>centos 7下ipython运行出现警告</p>
+</blockquote>
+<p>错误提示：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/home/meo/Code/pydata/lib/python3.6/site-packages/IPython/core/history.py:226: UserWarning: IPython History requires SQLite, your <span class="token function">history</span> will not be saved
+  warn<span class="token punctuation">(</span><span class="token string">"IPython History requires SQLite, your history will not be saved"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>解决方法：</p>
+<ul>
+<li>下载sqllite<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://www.sqlite.org/sqlite-autoconf-3071401.tar.gz
+<span class="token function">tar</span> zxvf sqlite-autoconf-3071401.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>编译安装</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> <span class="token builtin class-name">cd</span> sqlite-autoconf-3210000/
+<span class="token function">sudo</span> ./configure <span class="token parameter variable">--prefix</span><span class="token operator">=</span>/usr/local/
+<span class="token function">sudo</span> <span class="token function">make</span>
+<span class="token function">sudo</span> <span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>重新编译安装python</li>
+</ul>
+<blockquote>
+<p>ipython中使用matplotlib显示缺少tk</p>
+</blockquote>
+<p>通常提示：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">ImportError<span class="token punctuation">:</span> No module named <span class="token string">'_tkinter'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>tkinter和tk-devel缺失</p>
+<p>解决方法：</p>
+<ul>
+<li>安装缺失模块  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sduo yum <span class="token function">install</span> <span class="token parameter variable">-y</span> tkinter
+<span class="token function">sudo</span> yum <span class="token function">install</span> <span class="token parameter variable">-y</span> tk-devel<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>重新编译python</li>
+</ul>
+<h2 id="二-pip的配置与使用"><a href="#二-pip的配置与使用" class="headerlink" title="二. pip的配置与使用"></a>二. pip的配置与使用</h2><h3 id="1-基本配置"><a href="#1-基本配置" class="headerlink" title="1. 基本配置"></a>1. 基本配置</h3><p>pip默认会使用官方的源, 在国内下载速度不是很好, 因此可以配置国内镜像, 提高下载速度</p>
+<p>三种顺序的配置</p>
+<ol>
+<li>site-wide 配置文件位置: <code>C:\ProgramData\pip\pip.ini</code>or<code>/etc/xdg/pip/pip.conf</code></li>
+<li>per-user 配置文件位置: <code>%APPDATA%\pip\pip.ini</code>或者<code>%HOME%/pip/pip.conf</code></li>
+<li>virtualenv 配置文件位置: <code>%VIRTUAL_ENV%\pip.ini</code></li>
+</ol>
+<p>如果, 在以上位置没有找到<code>pip.ini</code>文件, 可以自己在任意位置创建一个, 然后设置环境变量<code>PIP_CONFIG_FILE</code>指向该文件, 文件内容为:</p>
+<p><code>pip.ini</code> or <code>pip.conf</code>:</p>
+<pre class="line-numbers language-none"><code class="language-none">[global]
+index-url &#x3D; https:&#x2F;&#x2F;pypi.douban.com&#x2F;simple<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>pipy国内镜像目前有：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://pypi.douban.com/">http://pypi.douban.com/</a>  豆瓣</li>
+<li><a target="_blank" rel="noopener" href="http://pypi.hustunique.com/">http://pypi.hustunique.com/</a>  华中理工大学</li>
+<li><a target="_blank" rel="noopener" href="http://pypi.sdutlinux.org/">http://pypi.sdutlinux.org/</a>  山东理工大学</li>
+<li><a target="_blank" rel="noopener" href="http://pypi.mirrors.ustc.edu.cn/">http://pypi.mirrors.ustc.edu.cn/</a>  中国科学技术大学</li>
+</ul>
+<p>pip.ini文件中的地址可以上面的国内镜像地中任意选择一个</p>
+<p>需要注意的是, 在Ubuntu系统中, 配置文件名应为<code>pip.conf</code></p>
+<h3 id="2-pip的基本操作"><a href="#2-pip的基本操作" class="headerlink" title="2. pip的基本操作"></a>2. pip的基本操作</h3><p>最常用的命令是查看安装包和安装等</p>
+<h4 id="2-1-查看命令"><a href="#2-1-查看命令" class="headerlink" title="2.1 查看命令"></a>2.1 查看命令</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip list <span class="token parameter variable">--format</span><span class="token operator">=</span>columns  <span class="token comment"># 显示安装的包列表</span>
+pip list <span class="token parameter variable">--format</span><span class="token operator">=</span>legacy  <span class="token comment"># 传统显示</span>
+pip list <span class="token parameter variable">--format</span><span class="token operator">=</span>json  <span class="token comment"># json方式显示 </span>
+pip list <span class="token parameter variable">--format</span><span class="token operator">=</span>freeze  <span class="token comment"># freeze命令形式显示 </span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2-2-安装相关命令"><a href="#2-2-安装相关命令" class="headerlink" title="2.2 安装相关命令"></a>2.2 安装相关命令</h4><p>安装包, 有三种不同的形式供选择:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> SomePackage            <span class="token comment"># latest version</span>
+pip <span class="token function">install</span> <span class="token assign-left variable">SomePackage</span><span class="token operator">==</span><span class="token number">1.0</span>.4     <span class="token comment"># specific version</span>
+pip <span class="token function">install</span> <span class="token string">'SomePackage>=1.0.4'</span>     <span class="token comment"># minimum version</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>从<code>wheels</code>文件安装包:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> SomePackage-1.0-py2.py3-none-any.whl<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>利用<code>requirement.txt</code>安装包:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> <span class="token parameter variable">-r</span> requirements.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>requirement.txt</code>是一个指定依赖包的文件, 可以很方便的下载所以的依赖包, 可以利用<code>pip</code>的命令很快的生成这个依赖文件, 在部署应用的时候应该经常用到:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip freeze <span class="token operator">></span> requirement.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<p>删除包命令:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip uninstall SomePackage<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更多命令, 参考pip<a target="_blank" rel="noopener" href="https://pip.pypa.io/en/stable/reference/">官方文档</a></p>
+<h2 id="三-使用虚拟环境virtualenv"><a href="#三-使用虚拟环境virtualenv" class="headerlink" title="三. 使用虚拟环境virtualenv"></a>三. 使用虚拟环境virtualenv</h2><blockquote>
+<p>为什么要使用虚拟环境? virtualenv可以为不同的项目生成一个个隔离运行的环境, 防止不同版本依赖问题, 便于管理</p>
+</blockquote>
+<h3 id="1-安装virtualenv包"><a href="#1-安装virtualenv包" class="headerlink" title="1. 安装virtualenv包"></a>1. 安装virtualenv包</h3><p>默认的python3环境没有安装virtualenv工具, 可以通过<code>pip</code>命令进行安装:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> virtualenv<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="2-创建虚拟环境"><a href="#2-创建虚拟环境" class="headerlink" title="2. 创建虚拟环境"></a>2. 创建虚拟环境</h3><p>在你喜欢的位置新建一个文件夹, 用来存放虚拟环境就可以了:</p>
+<pre class="line-numbers language-none"><code class="language-none">virtualenv --no-site-packages myflask<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>上述命令之后, 会在你的文件夹下产生一个<code>myflask</code>文件夹, 里面就是名为myflask的虚拟环境</p>
+<h3 id="3-激活虚拟环境"><a href="#3-激活虚拟环境" class="headerlink" title="3. 激活虚拟环境"></a>3. 激活虚拟环境</h3><p>windows环境:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./venv/myflask/Scripts/activate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>linux环境:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">source</span> /venv/myflask/Scripts/activate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="4-使用虚拟环境过程中的问题"><a href="#4-使用虚拟环境过程中的问题" class="headerlink" title="4. 使用虚拟环境过程中的问题"></a>4. 使用虚拟环境过程中的问题</h3><p>有些包无法用pip直接下载, 可以把下载下来的.exe安装包文件, 放在一定的位置, 然后用<code>easy_install</code>命令进行安装</p>
+<h3 id="5-离开虚拟环境"><a href="#5-离开虚拟环境" class="headerlink" title="5. 离开虚拟环境"></a>5. 离开虚拟环境</h3><pre class="line-numbers language-none"><code class="language-none">deactivate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更多关于virtualenv的内容, 参考<a target="_blank" rel="noopener" href="https://virtualenv.pypa.io/en/stable/">官方文档</a></p>
+<h2 id="四-使用git"><a href="#四-使用git" class="headerlink" title="四. 使用git"></a>四. 使用git</h2><p>git命令:</p>
+<p>从bae远程仓库克隆出本地仓库</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">git clone https:&#x2F;&#x2F;git.duapp.com&#x2F;your_bae_appid my_flask<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>本地文件复制修改完后:</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">git add -A
+git commit -m &quot;initial&quot;
+git push<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>git 记住用户名密码:</p>
+<pre class="line-numbers language-none"><code class="language-none">$ git config --global user.name [name]
+$ git config --global user.emial [email]
+$ git config --global credential.helper store<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>更多内容, 参考<a target="_blank" rel="noopener" href="https://git-scm.com/documentation">官方文档</a></p>
+<h2 id="五-部署flask应用到远程服务器-pythonanywhere"><a href="#五-部署flask应用到远程服务器-pythonanywhere" class="headerlink" title="五. 部署flask应用到远程服务器(pythonanywhere)"></a>五. 部署flask应用到远程服务器(pythonanywhere)</h2><p>The process of deploying an app on PythonAnywhere involves three main steps:</p>
+<pre><code>1. Uploading your code to PythonAnywhere
+2. Setting up a virtualenv, if you need one
+3. Configuring your application using WSGI
+</code></pre>
+<p>NB - only WSGI apps are supported, so that includes anything built with Django, Flask, Bottle,etc, but custom servers using, eg, Tornado, probably won’t work.</p>
+<h4 id="1-新建一个web-app-选择手工配置"><a href="#1-新建一个web-app-选择手工配置" class="headerlink" title="1. 新建一个web app, 选择手工配置"></a>1. 新建一个web app, 选择手工配置</h4><pre><code>Manual configuration involves editing your own WSGI configuration file in /var/www/. Usually this imports a WSGI-compatible application which you&#39;ve stored elsewhere
+
+When you click &quot;Next&quot;, we will create a WSGI file for you, including a simple &quot;Hello World&quot; app which you can use to get started, as well as some comments on how to use other frameworks.
+
+You will also be able to specify a virtualenv to use for your app.
+</code></pre>
+<h4 id="2-从github拉取代码"><a href="#2-从github拉取代码" class="headerlink" title="2. 从github拉取代码"></a>2. 从github拉取代码</h4><h4 id="3-创建virtualenv"><a href="#3-创建virtualenv" class="headerlink" title="3. 创建virtualenv"></a>3. 创建virtualenv</h4><h4 id="4-在虚拟环境中下载所需的包"><a href="#4-在虚拟环境中下载所需的包" class="headerlink" title="4. 在虚拟环境中下载所需的包"></a>4. 在虚拟环境中下载所需的包</h4><h4 id="5-配置WSGI文件"><a href="#5-配置WSGI文件" class="headerlink" title="5. 配置WSGI文件"></a>5. 配置WSGI文件</h4><p>环境变量要在这里设置</p>
+<pre class="line-numbers language-none"><code class="language-none">import os
+os.environ[&#39;FLASK_CONFIG&#39;] &#x3D; &#39;production&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h4 id="6-flask使用flask-sqlalchemy"><a href="#6-flask使用flask-sqlalchemy" class="headerlink" title="6. flask使用flask_sqlalchemy"></a>6. flask使用flask_sqlalchemy</h4><p>要下载linux下相应mysql的模块</p>
+<pre class="line-numbers language-none"><code class="language-none">pip install mysql-python<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>数据库路径也有相应的变化</p>
+<pre class="line-numbers language-none"><code class="language-none">os.environ[&#39;DATABASE_URI&#39;] &#x3D; &#39;mysql+mysqldb:&#x2F;&#x2F;username:password@wangmiao.mysql.pythonanywhere-services.com&#x2F;databasename&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<p>使用不同的mysql数据库驱动, 数据库连接路径也有不同</p>
+<p>使用pymsql时:</p>
+<pre class="line-numbers language-none"><code class="language-none">os.environ[&#39;DATABASE_URI&#39;] &#x3D; &#39;mysql+pymysql:&#x2F;&#x2F;username:password@wangmiao.mysql.pythonanywhere-services.com&#x2F;databasename&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="六-附加内容"><a href="#六-附加内容" class="headerlink" title="六: 附加内容"></a>六: 附加内容</h2><h3 id="1-编辑器"><a href="#1-编辑器" class="headerlink" title="1. 编辑器"></a>1. 编辑器</h3><blockquote>
+<p>编辑器当然要选择自己顺手的, 集成度较高的可以选择pycharm, 但我更喜欢用sublime text3, 选择sublime text3的原因有以下几点:</p>
+</blockquote>
+<ul>
+<li>启动速度快, 流畅</li>
+<li>界面简洁, 设置简单</li>
+<li>插件比较丰富</li>
+<li>快捷键比较高效</li>
+</ul>
+<h4 id="1-1-下载安装"><a href="#1-1-下载安装" class="headerlink" title="1.1 下载安装"></a>1.1 下载安装</h4><p><a target="_blank" rel="noopener" href="http://www.sublimetext.com/3">下载地址</a></p>
+<p>注册码的话, 网上可以很方便找到</p>
+<h4 id="1-2-插件安装"><a href="#1-2-插件安装" class="headerlink" title="1.2 插件安装"></a>1.2 插件安装</h4><p>插件安装之前, 需要先安装<code>package control</code>插件, 用于安装其他插件</p>
+<p><code>package control</code>可以通过sublime text3的命令窗口进行安装,  使用<code>ctrl+`</code>或者 <code>view</code> &gt; <code>Show Console</code> 菜单打开命令窗口, 输入以下代码, 回车:</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">,</span>os<span class="token punctuation">,</span>hashlib<span class="token punctuation">;</span>
+h <span class="token operator">=</span> <span class="token string">'df21e130d211cfc94d9b0905775a7c0f'</span> <span class="token operator">+</span> <span class="token string">'1e3d39e33b79698005270310898eea76'</span><span class="token punctuation">;</span>
+pf <span class="token operator">=</span> <span class="token string">'Package Control.sublime-package'</span><span class="token punctuation">;</span>
+ipp <span class="token operator">=</span> sublime<span class="token punctuation">.</span>installed_packages_path<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>install_opener<span class="token punctuation">(</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>build_opener<span class="token punctuation">(</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>ProxyHandler<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+by <span class="token operator">=</span> urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span> <span class="token string">'http://packagecontrol.io/'</span> <span class="token operator">+</span> pf<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">,</span> <span class="token string">'%20'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+dh <span class="token operator">=</span> hashlib<span class="token punctuation">.</span>sha256<span class="token punctuation">(</span>by<span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Error validating download (got %s instead of %s), please try manual install'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>dh<span class="token punctuation">,</span> h<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">if</span> dh <span class="token operator">!=</span> h <span class="token keyword">else</span> <span class="token builtin">open</span><span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span> ipp<span class="token punctuation">,</span> pf<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'wb'</span> <span class="token punctuation">)</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>by<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2a388dab1dc378ae.webp.jpg" alt="image"></p>
+<p><code>package control</code>插件安装之后就可以直接在sublime text3中通过<code>shift+ctrl+p</code>, 选择<code>Install Package</code>来安装其他插件了</p>
+<p><img src="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2489a01f707ab906.webp.jpg" alt="image"></p>
+<p>python环境比较有用的插件</p>
+<ul>
+<li>Anaconda: 代码规范检查, 代码提示</li>
+<li>Git: git版本管理插件</li>
+<li>AutoDocstring: 文档注释插件</li>
+<li>DocBlockr_Python: 文档注释</li>
+</ul>
+<h3 id="2-win下的增强命令行工具"><a href="#2-win下的增强命令行工具" class="headerlink" title="2. win下的增强命令行工具"></a>2. win下的增强命令行工具</h3><p><code>cmder</code>, <a target="_blank" rel="noopener" href="http://cmder.net/">下载地址</a>, 可以下载mini版, 启动速度快, 主要是几款比较好看的配色方案, 字体可以自定义</p>
+<h4 id="2-1-1703win10下中文重叠问题解决方法"><a href="#2-1-1703win10下中文重叠问题解决方法" class="headerlink" title="2.1 1703win10下中文重叠问题解决方法"></a>2.1 1703win10下中文重叠问题解决方法</h4><p><img src="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B237bebc5761110a0.jpg" alt="image"></p>
+<p>设置使用旧版控制台</p>
+<h4 id="2-2-中文乱码问题"><a href="#2-2-中文乱码问题" class="headerlink" title="2.2  中文乱码问题"></a>2.2  中文乱码问题</h4><p>在cmder中设置environment变量</p>
+<p><img src="http://ozi7kdi5x.bkt.clouddn.com/python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%83%A8%E7%BD%B2423a747e6d0c352.jpg" alt="image"></p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">set LANG&#x3D;zh_CN.UTF8<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="2-3-设置cmder中python虚拟环境提示符"><a href="#2-3-设置cmder中python虚拟环境提示符" class="headerlink" title="2.3 设置cmder中python虚拟环境提示符"></a>2.3 设置cmder中python虚拟环境提示符</h4><p>在新版cmder中, 默认情况, <code>(pydata)</code> 类似虚拟环境提示符是显示在第二行命令行提示符前面的, 而不是之前在路径前面那样, 要变成之前那样, 需要修改cmder文件夹下的<code>clink.lua</code>文件:</p>
+<pre class="line-numbers language-lua" data-language="lua"><code class="language-lua"><span class="token keyword">function</span> <span class="token function">set_prompt_filter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment">-- get_cwd() is differently encoded than the clink.prompt.value, so everything other than</span>
+    <span class="token comment">-- pure ASCII will get garbled. So try to parse the current directory from the original prompt</span>
+    <span class="token comment">-- and only if that doesn't work, use get_cwd() directly.</span>
+    <span class="token comment">-- The matching relies on the default prompt which ends in X:\PATH\PATH></span>
+    <span class="token comment">-- (no network path possible here!)</span>
+    <span class="token keyword">local</span> old_prompt <span class="token operator">=</span> clink<span class="token punctuation">.</span>prompt<span class="token punctuation">.</span>value
+    <span class="token keyword">local</span> cwd <span class="token operator">=</span> old_prompt<span class="token punctuation">:</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token string">'.*(.:[^>]*)>'</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> cwd <span class="token operator">==</span> <span class="token keyword">nil</span> <span class="token keyword">then</span> cwd <span class="token operator">=</span> clink<span class="token punctuation">.</span><span class="token function">get_cwd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">end</span>
+    
+    <span class="token comment">-- environment systems like pythons virtualenv change the PROMPT and usually</span>
+    <span class="token comment">-- set some variable. But the variables are differently named and we would never</span>
+    <span class="token comment">-- get them all, so try to parse the env name out of the PROMPT.</span>
+    <span class="token comment">-- envs are usually put in round or square parentheses and before the old prompt</span>
+    <span class="token keyword">local</span> env <span class="token operator">=</span> old_prompt<span class="token punctuation">:</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token string">'.*%(([^%)]+)%).+:'</span><span class="token punctuation">)</span>
+    <span class="token comment">-- also check for square brackets</span>
+    <span class="token keyword">if</span> env <span class="token operator">==</span> <span class="token keyword">nil</span> <span class="token keyword">then</span> env <span class="token operator">=</span> old_prompt<span class="token punctuation">:</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token string">'.*%[([^%]]+)%].+:'</span><span class="token punctuation">)</span> <span class="token keyword">end</span>
+    
+    <span class="token comment">-- build our own prompt</span>
+    <span class="token comment">-- orig: $E[1;32;40m$P$S&#123;git&#125;&#123;hg&#125;$S$_$E[1;30;40m&#123;lamb&#125;$S$E[0m</span>
+    <span class="token comment">-- color codes: "\x1b[1;37;40m"</span>
+    <span class="token keyword">local</span> cmder_prompt <span class="token operator">=</span> <span class="token string">"\x1b[1;32;40m&#123;cwd&#125; &#123;git&#125;&#123;hg&#125; \n\x1b[1;30;40m&#123;lamb&#125; \x1b[0m"</span>
+    cmder_prompt <span class="token operator">=</span> string<span class="token punctuation">.</span><span class="token function">gsub</span><span class="token punctuation">(</span>cmder_prompt<span class="token punctuation">,</span> <span class="token string">"&#123;cwd&#125;"</span><span class="token punctuation">,</span> cwd<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> env <span class="token operator">==</span> <span class="token keyword">nil</span> <span class="token keyword">then</span>
+        lambda <span class="token operator">=</span> <span class="token string">"λ"</span>
+    <span class="token keyword">else</span>
+        lambda <span class="token operator">=</span> <span class="token string">"("</span><span class="token operator">..</span>env<span class="token operator">..</span><span class="token string">") λ"</span>
+    <span class="token keyword">end</span>
+    clink<span class="token punctuation">.</span>prompt<span class="token punctuation">.</span>value <span class="token operator">=</span> string<span class="token punctuation">.</span><span class="token function">gsub</span><span class="token punctuation">(</span>cmder_prompt<span class="token punctuation">,</span> <span class="token string">"&#123;lamb&#125;"</span><span class="token punctuation">,</span> lambda<span class="token punctuation">)</span>
+<span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>默认情况下, 其中的<code>set_prompt_filter</code>函数原版是这样的, 修改这个函数就可以达到目的, 不喜欢<code>λ</code>符号的, 也可以在这里修改, 下面是修改虚拟环境提示符的代码:</p>
+<pre class="line-numbers language-none"><code class="language-none">function set_prompt_filter()
+    -- get_cwd() is differently encoded than the clink.prompt.value, so everything other than
+    -- pure ASCII will get garbled. So try to parse the current directory from the original prompt
+    -- and only if that doesn&#39;t work, use get_cwd() directly.
+    -- The matching relies on the default prompt which ends in X:\PATH\PATH&gt;
+    -- (no network path possible here!)
+    local old_prompt &#x3D; clink.prompt.value
+    local cwd &#x3D; old_prompt:match(&#39;.*(.:[^&gt;]*)&gt;&#39;)
+    if cwd &#x3D;&#x3D; nil then cwd &#x3D; clink.get_cwd() end
+    
+    -- environment systems like pythons virtualenv change the PROMPT and usually
+    -- set some variable. But the variables are differently named and we would never
+    -- get them all, so try to parse the env name out of the PROMPT.
+    -- envs are usually put in round or square parentheses and before the old prompt
+    local env &#x3D; old_prompt:match(&#39;.*%(([^%)]+)%).+:&#39;)
+    -- also check for square brackets
+    if env &#x3D;&#x3D; nil then env &#x3D; old_prompt:match(&#39;.*%[([^%]]+)%].+:&#39;) end
+    
+    -- build our own prompt
+    -- orig: $E[1;32;40m$P$S&#123;git&#125;&#123;hg&#125;$S$_$E[1;30;40m&#123;lamb&#125;$S$E[0m
+    -- color codes: &quot;\x1b[1;37;40m&quot;
+    local cmder_prompt &#x3D; &quot;\x1b[1;37;40m&#123;env&#125;\x1b[1;32;40m&#123;cwd&#125; &#123;git&#125;&#123;hg&#125; \n\x1b[1;30;40m&#123;lamb&#125; \x1b[0m&quot;
+    if env &#x3D;&#x3D; nil then
+        env &#x3D; &#39;&#39;
+    else
+        env &#x3D; &quot;(&quot;..env..&quot;) &quot;
+    end
+    cmder_prompt &#x3D; string.gsub(cmder_prompt, &quot;&#123;env&#125;&quot;, env)
+    cmder_prompt &#x3D; string.gsub(cmder_prompt, &quot;&#123;cwd&#125;&quot;, cwd)
+    lambda &#x3D; &quot;λ&quot;
+    clink.prompt.value &#x3D; string.gsub(cmder_prompt, &quot;&#123;lamb&#125;&quot;, lambda)
+end
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="3-不容易安装的python包whl包下载地址"><a href="#3-不容易安装的python包whl包下载地址" class="headerlink" title="3. 不容易安装的python包whl包下载地址"></a>3. 不容易安装的python包whl包下载地址</h3><p>在windows下, 有些包不能直接通过pip下载官网的包, 比如<code>scipy</code>,  可以在这个<a target="_blank" rel="noopener" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">地址</a>, 找到相应的包, 下载安装就可以了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/%E7%8E%AF%E5%A2%83/" rel="tag"># 环境</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Sublime-Text3/" rel="tag"># Sublime Text3</a>
+              <a href="/tags/cmder/" rel="tag"># cmder</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/13/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-C%E8%AF%AD%E8%A8%80-2017-09-13-C%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE-win10/" rel="next" title="C语言开发环境配置-win10">
+                  C语言开发环境配置-win10 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9abc21083ee0e857a03ca77297e15183"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

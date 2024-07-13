@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Python爬虫实例(MOHRE)[toc] 一. 概述 由于工作需要, 每过一段时间, 需要在阿联酋移民局的网站上检查某一人员是否在系统中, 而系统中人名是按字母序排列的, 找到一个人往往需要很多次翻页. 所以, 为了能够检索所有的劳工卡信息, 我们想要每次都把公司的所有雇员信息下载下来.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python爬虫实例(MOHRE)">
+<meta property="og:url" content="https://wangmaio.site/2019/01/11/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="Python爬虫实例(MOHRE)[toc] 一. 概述 由于工作需要, 每过一段时间, 需要在阿联酋移民局的网站上检查某一人员是否在系统中, 而系统中人名是按字母序排列的, 找到一个人往往需要很多次翻页. 所以, 为了能够检索所有的劳工卡信息, 我们想要每次都把公司的所有雇员信息下载下来.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/01%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/02%E6%8F%90%E4%BA%A4%E7%99%BB%E5%BD%95.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/03%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81%E9%A1%B5%E9%9D%A2.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/04%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81.png">
+<meta property="og:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/05%E5%91%98%E5%B7%A5%E5%88%97%E8%A1%A8%E9%A1%B5%E9%9D%A2.png">
+<meta property="article:published_time" content="2019-01-11T04:51:03.000Z">
+<meta property="article:modified_time" content="2022-01-17T06:31:21.056Z">
+<meta property="article:author" content="Wang Miao">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="Scrapy">
+<meta property="article:tag" content="spider">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangmaio.site/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/01%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png">
+
+
+<link rel="canonical" href="https://wangmaio.site/2019/01/11/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2019/01/11/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/","path":"2019/01/11/编程开发-Python-2019-01-11-Python爬虫实例-MOHRE/","title":"Python爬虫实例(MOHRE)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python爬虫实例(MOHRE) | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE"><span class="nav-number">1.</span> <span class="nav-text">Python爬虫实例(MOHRE)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">一. 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E5%87%86%E5%A4%87%E5%B7%A5%E5%85%B7"><span class="nav-number">1.2.</span> <span class="nav-text">二. 准备工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-scrapy"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. scrapy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-requests"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. requests</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-lxml-html-etree"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. lxml.html.etree</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E7%88%AC%E5%8F%96%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">三. 爬取步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%99%BB%E5%BD%95%E9%AA%8C%E8%AF%81%E5%A4%84%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 登录验证处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 页面解析</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2019/01/11/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python爬虫实例(MOHRE) | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python爬虫实例(MOHRE)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-11 12:51:03" itemprop="dateCreated datePublished" datetime="2019-01-11T12:51:03+08:00">2019-01-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-01-17 14:31:21" itemprop="dateModified" datetime="2022-01-17T14:31:21+08:00">2022-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">编程开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Python爬虫实例-MOHRE"><a href="#Python爬虫实例-MOHRE" class="headerlink" title="Python爬虫实例(MOHRE)"></a>Python爬虫实例(MOHRE)</h1><p>[toc]</p>
+<h2 id="一-概述"><a href="#一-概述" class="headerlink" title="一. 概述"></a>一. 概述</h2><blockquote>
+<p>由于工作需要, 每过一段时间, 需要在阿联酋移民局的网站上检查某一人员是否在系统中, 而系统中人名是按字母序排列的, 找到一个人往往需要很多次翻页. 所以, 为了能够检索所有的劳工卡信息, 我们想要每次都把公司的所有雇员信息下载下来. </p>
+</blockquote>
+<span id="more"></span>
+<p>MOHRE(The Ministry of Human Resources and Emiratisation), 中文阿联酋人力资源与移民局, 要获取公司的雇员信息, 首先要用公司的账户进行登录, 登录后回答相应的提示问题, 再跳转到雇员信息页面, 再解析页面上的信息就可以得到我们想要的数据了. </p>
+<p>登录验证 -&gt; 问题验证 -&gt; 数据提取</p>
+<blockquote>
+<p>如何完成登录验证?</p>
+</blockquote>
+<p>借助requests库, 模拟发送请求, 完成两次验证, 返回相应的Cookie值.</p>
+<blockquote>
+<p>如何解析页面?</p>
+</blockquote>
+<p>python有成熟的第三方数据爬取的库<code>scrapy</code>, 可以很方便的利用scrapy完成页面的解析及提取工作.</p>
+<h2 id="二-准备工具"><a href="#二-准备工具" class="headerlink" title="二. 准备工具"></a>二. 准备工具</h2><h3 id="1-scrapy"><a href="#1-scrapy" class="headerlink" title="1. scrapy"></a>1. scrapy</h3><blockquote>
+<p>scrapy是一个为爬虫应用而生的应用框架, 能够用来解析所有结构化得页面.</p>
+</blockquote>
+<p>详细的参考说明可以参见 <a target="_blank" rel="noopener" href="https://doc.scrapy.org/en/master/">scrapy官网</a></p>
+<ol>
+<li>下载安装</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">pip install scrapy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>创建爬虫项目</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">scrapy startproject mohre<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>编写核心程序(位于spider下面)</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">mohre&#x2F;
+    scrapy.cfg            # deploy configuration file
+
+    mohre&#x2F;             # project&#39;s Python module, you&#39;ll import your code from here
+        __init__.py
+
+        items.py          # project items definition file
+
+        middlewares.py    # project middlewares file
+
+        pipelines.py      # project pipelines file
+
+        settings.py       # project settings file
+
+        spiders&#x2F;          # a directory where you&#39;ll later put your spiders
+            __init__.py
+            
+            cookie.py     # the module you put the get_cookie function
+
+            labour.py     # core spider file <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="4">
+<li>运行爬虫程序, 输出到<code>csv</code>文件</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">scrapy crawl emp -o emplist.csv<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="2-requests"><a href="#2-requests" class="headerlink" title="2. requests"></a>2. requests</h3><p>requests有非常好用的模拟发送请求的函数, 这里我们用来完成两次验证</p>
+<p>安装方法:</p>
+<pre class="line-numbers language-none"><code class="language-none">pip install requests<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>requests 的使用方法易于理解, 详细的用法可以参考 <a target="_blank" rel="noopener" href="http://www.python-requests.org/en/master/">requests官网</a></p>
+<p>我们要用的主要功能有:</p>
+<ol>
+<li><code>request.session</code>功能</li>
+<li><code>session.get(url)</code></li>
+<li><code>seesion.post(url, data, heders)</code></li>
+</ol>
+<h3 id="3-lxml-html-etree"><a href="#3-lxml-html-etree" class="headerlink" title="3. lxml.html.etree"></a>3. lxml.html.etree</h3><p>scrapy本身带了解析HTML页面的能力, 但是我们在获取登录cookie的时候, 我们只能先借助requests库发送请求, 再利用lxml.html.etree来解析返回的页面</p>
+<p>详细的用法见<a target="_blank" rel="noopener" href="https://lxml.de/lxmlhtml.html">官网</a></p>
+<p>我们这里用的功能其实与scrapy中的css选择器大致相同, 函数的用法有稍许的不同.</p>
+<h2 id="三-爬取步骤"><a href="#三-爬取步骤" class="headerlink" title="三. 爬取步骤"></a>三. 爬取步骤</h2><p>总的步骤可以分为两部分, 一部分负责登录验证cookie的获取, 另一部分负责解析及生成所需数据.</p>
+<h3 id="1-登录验证处理"><a href="#1-登录验证处理" class="headerlink" title="1. 登录验证处理"></a>1. 登录验证处理</h3><p>首先, 分析登录页面的结构及登录时所需提交的数据.</p>
+<p>登录页面效果如下:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/01%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png" alt="登录页面"></p>
+<p>下面是登录页面的HTML结构, 可以看到表单中有几个隐藏中的参数, 后面模拟验证登录会用到</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>frmLogin<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>./login.aspx?lang=eng<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">onsubmit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token literal-property property">javascript</span><span class="token operator">:</span><span class="token keyword">return</span> <span class="token function">WebForm_OnSubmit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span>
+    <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>frmLogin<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTTARGET<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTTARGET<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTARGUMENT<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTARGUMENT<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATE<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATE<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/wEPDwULLTE2ODcyMDQ2MDUPZBYCAgEPZBYUAhkPFgIeCWlubmVyaHRtbAVuPGEgaHJlZj0nU1NPUmVkaXJlY3QuYXNweD9BcHBJRD1OVFdTTCc+PGltZyBzcmM9J0ltYWdlcy9TbWFydFBhc3MuanBnJyBzdHlsZT0naGVpZ2h0OjQ2cHg7IHdpZHRoOjIwMHB4OycvPjwvYT5kAhsPDxYCHgRUZXh0BQgxMDgzNzMxM2RkAh0PDxYCHwEFBTExNDg2ZGQCHw8PFgIfAQUGMTI5MzI4ZGQCIQ8PFgIfAQUGNDg0NDkxZGQCLQ8PZBYCHgdPbkNsaWNrBR1KYXZhU2NyaXB0OnJldHVybiB2YWxpZGF0ZSgpO2QCMw8PFgIfAQUoV2hhdCBpcyB5b3VyIG9waW5pb24gYWJvdXQgdGhpcyB3ZWJzaXRlP2RkAjcPDxYCHwEFCUV4Y2VsbGVudGRkAjsPDxYCHwEFBEdvb2RkZAI/Dw8WAh8BBQhBY2NlcHRlZGRkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYFBQZyZEFuczEFBnJkQW5zMgUGcmRBbnMyBQZyZEFuczMFBnJkQW5zM4ZFlmWhclpng5Sf6MKt0EhdY/oPz6kkgQDpa5/C8D8N<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATEGENERATOR<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATEGENERATOR<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0428CBE9<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTVALIDATION<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTVALIDATION<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/wEdABYIEPM8/T91XneGPQ1SRtM79blI3CMu38DZhvtVg0A1jAchBDsGRG9ZfJOBdKkCF4EU9J1w2sKBHROFXnqIDBMatlx55RwyllFnTGO/io4DWWN6ZYJNGAQHn0c9zMgZU3B2NvjHOkq5wKoqN6Aim8WG8tE4qI7UAUU9EOLUxz/cCPKFQvO1JfZiM1HVv+DKjoszHc/H4FBVzxWkc9VezzQN5IN6oJBlk11msy36jadMlKM6CWabl8ZKTlSSkWx8rh5DB2YfWbjwUYntrwPx36ESX7JzMDb/wVJ9mJ810Q97izzmltaUM7aEAN+g9cP/m13hgAAu9je581zBbk7c4sh+d7RnisS1PiyBpYEMF6nUbLTE/53XZug13ygX1VEAZiC3zEBk0+CrJ9JH/kfsOtYKEEiEoCtJLWPQasqn4dMVICA5ToeEaIY8FsTKJAoH286KnJAu6CKHUdY9glvBwFvvI4R2XFuv+NyO10+mp1xBQOcgAVsosM3pxA/Mw/Sd53Q=<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>textbox-wap<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>username<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>txtUserName<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>txtUserName<span class="token punctuation">"</span></span> <span class="token attr-name">autocomplete</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>off<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>txtPassword<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>txtPassword<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>lbtnForgotPass<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="token entity named-entity" title="&quot;">&amp;quot;</span>lbtnForgotPass<span class="token entity named-entity" title="&quot;">&amp;quot;</span>, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, true, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, false, true))<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Forgot
+        Password /Security Question?<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>flexbox<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cmdlogin<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Submit<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">onclick</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token literal-property property">javascript</span><span class="token operator">:</span><span class="token function">WebForm_DoPostBackWithOptions</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WebForm_PostBackOptions</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span>cmdlogin<span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token operator">&amp;</span>quot<span class="token punctuation">;</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span><span class="token punctuation">"</span></span></span>
+            <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cmdlogin<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-primary<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>lbtnNewEmployee<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="token entity named-entity" title="&quot;">&amp;quot;</span>lbtnNewEmployee<span class="token entity named-entity" title="&quot;">&amp;quot;</span>, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, true, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, false, true))<span class="token punctuation">"</span></span>
+            <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>New Employees Signup here<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>lbtnNewUser<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-default<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(<span class="token entity named-entity" title="&quot;">&amp;quot;</span>lbtnNewUser<span class="token entity named-entity" title="&quot;">&amp;quot;</span>, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, true, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, <span class="token entity named-entity" title="&quot;">&amp;quot;</span><span class="token entity named-entity" title="&quot;">&amp;quot;</span>, false, true))<span class="token punctuation">"</span></span>
+            <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> block</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>New Owners Signup here<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>下面是截取提交登录的过程中传递参数的截图:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/02%E6%8F%90%E4%BA%A4%E7%99%BB%E5%BD%95.png" alt="提交登录"></p>
+<p>从图中可以看到, 提交了这些参数, 其中五个隐藏在页面中的参数和用户名密码是必须的, 其他的并不是很重要, 我们只要从页面中把这些提取出来, 连同用户名/密码一起提交, 就可以完成初步验证</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">__EVENTTARGET:                          // 隐藏在页面中的参数
+__EVENTARGUMENT:                        // 隐藏在页面中的参数
+__VIEWSTATE:/wEPDwULLTE2ODcyMDQ2MDUPZ   // 隐藏在页面中的参数
+__VIEWSTATEGENERATOR:0428CBE9           // 隐藏在页面中的参数
+__EVENTVALIDATION:/wEdABYIEPM8          // 隐藏在页面中的参数
+type:pages
+type:news
+type:events
+type:faqs
+type:service
+txtUserName:xxxxx                       // 提交的用户名
+txtPassword:xxxxx                       // 提交的密码
+cmdlogin:Submit
+txtName:
+txtEmail:
+txtComments:
+hdnComno:
+hdnStatus:
+gPoll:rdAns1
+hdnQuestion:1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>由于需要问题验证, 此时虽然得到了一个cookie, 但不能够使用</p>
+<p>登录成功后, 会跳转到问题验证页面:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/03%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81%E9%A1%B5%E9%9D%A2.png" alt="问题验证页面"></p>
+<p>通过查看HTML代码, 可以看到问题验证其实是一个嵌套的iframe, iframe的代码如下:</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Form1<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>./SecurityQuestions.aspx?type=1<span class="token entity named-entity" title="&amp;">&amp;amp;</span>lang=1<span class="token entity named-entity" title="&amp;">&amp;amp;</span>userID=31416076573906<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Form1<span class="token punctuation">"</span></span>
+    <span class="token attr-name">dir</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATE<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATE<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/wEPDwUKMTQxNDM1NTI1MA9kFgJmD2QWAgIBD2QWBAIBD2QWAgIBD2QWAgIBDxYCHgdWaXNpYmxlaBYIAgEPZBYCAgEPZBYCAgEPEGRkFgBkAgIPZBYCAgEPZBYCAgEPDxYCHgRUZXh0ZWRkAgMPZBYCAgEPZBYCAgEPEGRkFgBkAgQPZBYCAgEPZBYCAgEPDxYCHwFlZGQCAg9kFgICAQ9kFgICAQ9kFgJmD2QWAgIBD2QWAgIBDw8WAh8BBRxXaGF0IGlzIHlvdXIgZmF2b3JpdGUgY29sb3I/ZGRkuJzrJR5MIM5THyFMd50eqEc04kTwDrO3Tzcd0PFrZF8=<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATEGENERATOR<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__VIEWSTATEGENERATOR<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>823AD229<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hidden<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTVALIDATION<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>__EVENTVALIDATION<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/wEdAANl8JPPQXxJKQsyWwDBCkZVV8Br3qobb5+3aHdcJeGCPrDVG0sT6bnJexpzy9nEXAs8t74ulrfzb3d6yyS2rJN22uCgqMPvpf5FOWKcxsKEpQ==<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">width</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>100%<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        关于问题回答表单的代码
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同样的, 这个表单中也包含几个隐藏的参数, 将答案及隐藏的参数一块提交给验证的网址, 正常浏览器会利用返回的页面中的js代码完成进一步的验证<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/04%E9%97%AE%E9%A2%98%E9%AA%8C%E8%AF%81.png" alt="问题验证"></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">__VIEWSTATE:/wEPDwUKMTQxN
+__VIEWSTATEGENERATOR:823AD229
+__EVENTVALIDATION:/wEdAANqj5rO+kwNDHGx2wX65AqaV8Br3qobb5+3aHdcJeGCPrDVG0sT6bnJexpzy9nEXAuhYPLXGl4byF9gCESzBlRvnGAMVw6dJs7rTLonqZC/Cg==
+txtAnswer:GREEN
+btnSubmit2:Submit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>提交问题返回的js代码会包含安全验证的tkn码, 在利用验证网址组合tkn码进行get请求, 至此安全验证, 现在提取cookie, 就可以使用了<br>完整的获取cookie代码如下:</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">from</span> lxml<span class="token punctuation">.</span>html <span class="token keyword">import</span> etree
+
+
+<span class="token keyword">def</span> <span class="token function">get_cookie</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    获取登录用的Cookie
+    1. 通过解析登录页面, 提交账户密码及一些其他隐藏在页面中的参数, 获取cookie;
+    此时获取的Cookie不是能够直接使用, 还需要通过问题验证才可以使用
+    2. 利用第一步已经登录的session, 获取隐藏在二次验证的页面中的iframe问题验证页面, 通过提交问题及其他隐藏校验信息,
+    返回校验成功的页面, 此时页面中含有一个包含的tkn信息
+    3. 正常的浏览器界面在验证问题后转向一个登陆成功后的公司用户信息主页面, 通过分析第二步的验证页面, 可以知道,
+    页面的跳转是通过JS实现的, JS中包含的tkn信息和用户ID, 作为二次验证的参数, GET提交得到跳转的页面, 此时的cookie就可以正常使用了
+
+    Returns:
+        Dict: 完成验证的Cookie字典
+    """</span>
+
+    <span class="token comment"># 登录用的地址</span>
+    login_url <span class="token operator">=</span> <span class="token string">'https://eservices.mohre.gov.ae/enetwasal/login.aspx?lang=eng'</span>
+    <span class="token comment"># 二次验证的地址</span>
+    auth_url <span class="token operator">=</span> <span class="token string">'https://eservices.mohre.gov.ae/enetwasal/SecurityAuthentication.aspx?type=1'</span>
+    <span class="token comment"># 获取问题验证的地址, 这里直接把UserID参数硬编码进去了</span>
+    question_url <span class="token operator">=</span> <span class="token string">'https://eservices.mohre.gov.ae/enetwasal/SecurityQuestions.aspx?type=1&amp;lang=1&amp;userID=31416076573906'</span>
+
+    <span class="token comment"># 使用requests的session功能</span>
+    session <span class="token operator">=</span> requests<span class="token punctuation">.</span>session<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 获取登录页面, 并用etree.HTML进行解析</span>
+    r_login <span class="token operator">=</span> session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>login_url<span class="token punctuation">)</span>
+    page <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>r_login<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+    <span class="token comment"># 解析隐藏在页面中的登录需要的参数信息</span>
+    view_state <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#__VIEWSTATE'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    view_state_generator <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#__VIEWSTATEGENERATOR'</span><span class="token punctuation">)</span><span class="token punctuation">[</span>
+        <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    event_validation <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#__EVENTVALIDATION'</span><span class="token punctuation">)</span><span class="token punctuation">[</span>
+        <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    hdn_question <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#hdnQuestion'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    <span class="token comment"># 构造登录需要的POST参数信息</span>
+    formdata <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token string">'__EVENTTARGET'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'__EVENTARGUMENT'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'__VIEWSTATE'</span><span class="token punctuation">:</span> view_state<span class="token punctuation">,</span>
+        <span class="token string">'__VIEWSTATEGENERATOR'</span><span class="token punctuation">:</span> view_state_generator<span class="token punctuation">,</span>
+        <span class="token string">'__EVENTVALIDATION'</span><span class="token punctuation">:</span> event_validation<span class="token punctuation">,</span>
+        <span class="token string">'txtUserName'</span><span class="token punctuation">:</span> <span class="token string">'xxxxxx'</span><span class="token punctuation">,</span>
+        <span class="token string">'txtPassword'</span><span class="token punctuation">:</span> <span class="token string">'xxxxxx'</span><span class="token punctuation">,</span>
+        <span class="token string">'cmdlogin'</span><span class="token punctuation">:</span> <span class="token string">'Submit'</span><span class="token punctuation">,</span>
+        <span class="token string">'txtName'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'txtEmail'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'txtComments'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'hdnComno'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'hdnStatus'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token string">'gPoll'</span><span class="token punctuation">:</span> <span class="token string">'rdAns1'</span><span class="token punctuation">,</span>
+        <span class="token string">'hdnQuestion'</span><span class="token punctuation">:</span> hdn_question
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment"># 构造USE-Agent头信息, 防止被网站屏蔽掉</span>
+    headers <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token string">'User-Agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment"># 提交登录信息, 问题验证的地址, 验证回调的二次验证也会在这里面返回</span>
+    r_after_login <span class="token operator">=</span> session<span class="token punctuation">.</span>post<span class="token punctuation">(</span>login_url<span class="token punctuation">,</span> data<span class="token operator">=</span>formdata<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+    <span class="token comment"># 使用登录后的session获取问题验证页面</span>
+    r_question <span class="token operator">=</span> session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>question_url<span class="token punctuation">)</span>
+    <span class="token comment"># 使用etree解析页面, 获取隐藏的参数信息</span>
+    page <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>r_question<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+    view_state <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#__VIEWSTATE'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    view_state_generator <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#__VIEWSTATEGENERATOR'</span><span class="token punctuation">)</span><span class="token punctuation">[</span>
+        <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    event_validation <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'input#__EVENTVALIDATION'</span><span class="token punctuation">)</span><span class="token punctuation">[</span>
+        <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>attrib<span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span>
+    <span class="token comment"># 获取问题, 并判断是两个问题中的哪一个, 再给出相应的问题</span>
+    question <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'span#lblQuestionValue'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>text
+    answer <span class="token operator">=</span> <span class="token string">'GREEN '</span> <span class="token keyword">if</span> <span class="token string">'color'</span> <span class="token keyword">in</span> question <span class="token keyword">else</span> <span class="token string">'Pakistan'</span>
+    <span class="token comment"># 构造问题验证提交参数</span>
+    formdata <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token string">'__VIEWSTATE'</span><span class="token punctuation">:</span> view_state<span class="token punctuation">,</span>
+        <span class="token string">'__VIEWSTATEGENERATOR'</span><span class="token punctuation">:</span> view_state_generator<span class="token punctuation">,</span>
+        <span class="token string">'__EVENTVALIDATION'</span><span class="token punctuation">:</span> event_validation<span class="token punctuation">,</span>
+        <span class="token string">'txtAnswer'</span><span class="token punctuation">:</span> answer<span class="token punctuation">,</span>
+        <span class="token string">'btnSubmit2'</span><span class="token punctuation">:</span> <span class="token string">'Submit'</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment"># 提交问题验证信息</span>
+    r_after_question <span class="token operator">=</span> session<span class="token punctuation">.</span>post<span class="token punctuation">(</span>
+        question_url<span class="token punctuation">,</span> data<span class="token operator">=</span>formdata<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+    <span class="token comment"># 获取验证页面后的返回页面, 并解析其中的JS跳转信息中的tkn信息</span>
+    page <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>r_after_question<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+    js <span class="token operator">=</span> page<span class="token punctuation">.</span>cssselect<span class="token punctuation">(</span><span class="token string">'script'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    tkn <span class="token operator">=</span> js<span class="token punctuation">.</span>text<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">"'"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    <span class="token comment"># 构造出二次验证的地址, 并直接获取页面完成验证</span>
+    new_auth_url <span class="token operator">=</span> auth_url <span class="token operator">+</span> tkn
+    r_auth <span class="token operator">=</span> session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>new_auth_url<span class="token punctuation">)</span>
+
+    <span class="token comment"># 解析出字典形式的cookie信息并返回</span>
+    cookie <span class="token operator">=</span> session<span class="token punctuation">.</span>cookies<span class="token punctuation">.</span>get_dict<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> cookie<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="2-页面解析"><a href="#2-页面解析" class="headerlink" title="2. 页面解析"></a>2. 页面解析</h3><p>登录后的员工列表页面会有250条人员信息, 并且是分页显示的:<br><img src="/images/2019-01-11-Python%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B-MOHRE/05%E5%91%98%E5%B7%A5%E5%88%97%E8%A1%A8%E9%A1%B5%E9%9D%A2.png" alt="员工列表页面"></p>
+<p>这个爬虫的核心部分, 就是利用上面的获取cookie函数, 作初始化, 进入员工列表页面, 解析页面结构, 并提交下一页请求.</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+一个爬取阿联酋移民与劳工局上本公司劳工卡信息的爬虫
+"""</span>
+<span class="token keyword">import</span> scrapy
+<span class="token keyword">from</span> <span class="token punctuation">.</span>cookie <span class="token keyword">import</span> get_cookie
+
+
+<span class="token keyword">class</span> <span class="token class-name">EmpSpider</span><span class="token punctuation">(</span>scrapy<span class="token punctuation">.</span>Spider<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    name <span class="token operator">=</span> <span class="token string">'emp'</span>
+    allowed_domains <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'eservices.mohre.gov.ae'</span><span class="token punctuation">]</span>
+    <span class="token comment"># 包含雇员信息的页面, 每页可以显示250条信息</span>
+    start_urls <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token string">'https://eservices.mohre.gov.ae/enetwasal/rptComEmpList.aspx?comno=587582'</span><span class="token punctuation">]</span>
+
+    <span class="token comment"># 使用get_cookie函数获取有效cookie, 使用cookie请求雇员详细信息页面</span>
+    <span class="token keyword">def</span> <span class="token function">start_requests</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        request <span class="token operator">=</span> scrapy<span class="token punctuation">.</span>Request<span class="token punctuation">(</span>
+            self<span class="token punctuation">.</span>start_urls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            callback<span class="token operator">=</span>self<span class="token punctuation">.</span>parse<span class="token punctuation">,</span>
+            cookies<span class="token operator">=</span>get_cookie<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+        <span class="token keyword">yield</span> request
+
+    <span class="token keyword">def</span> <span class="token function">parse</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""解析页面, 生成结果信息
+        
+        Arguments:
+            response &#123;scrapy.Response&#125; -- 请求页面返回的页面
+        """</span>
+
+        <span class="token comment"># 在员工信息列表页面点击下一页的过程中, 实际是触发了一个JS事件,</span>
+        <span class="token comment"># js会通过隐藏在页面中的一些参数值向服务器请求下一页</span>
+        <span class="token comment"># 通过对每一次请求及返回页面源码的查看, 可以知道每次请求, </span>
+        <span class="token comment"># 有三个状态及验证信息的字段, 两个名字字段, 应该是标记位置用的, </span>
+        <span class="token comment"># 另外代表下一页还上一页的的一个信息</span>
+
+        <span class="token comment"># 从页面提取三个验证字段</span>
+        view_state <span class="token operator">=</span> response<span class="token punctuation">.</span>css<span class="token punctuation">(</span>
+            <span class="token string">'input#__VIEWSTATE::attr(value)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        view_state_generator <span class="token operator">=</span> response<span class="token punctuation">.</span>css<span class="token punctuation">(</span>
+            <span class="token string">'input#__VIEWSTATEGENERATOR::attr(value)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        event_validation <span class="token operator">=</span> response<span class="token punctuation">.</span>css<span class="token punctuation">(</span>
+            <span class="token string">'input#__EVENTVALIDATION::attr(value)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># 从页面提取两个关于人名的字段, 标记上一页的的字段可能为空,</span>
+        <span class="token comment"># 两个名字相同时候, 说明已经是最后一页了, 本次请求得到的页面其实是重复的</span>
+        <span class="token comment"># 所以这里提前提取, 为的是首先判断页面是已经爬取过, 如果相同就可以终止了</span>
+        hdnNextCardName <span class="token operator">=</span> response<span class="token punctuation">.</span>css<span class="token punctuation">(</span>
+            <span class="token string">'input#hdnNextCardName::attr(value)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token string">""</span>
+        hdnPreviousCardName <span class="token operator">=</span> response<span class="token punctuation">.</span>css<span class="token punctuation">(</span>
+            <span class="token string">'input#hdnPreviousCardName::attr(value)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token string">""</span>
+
+        <span class="token comment"># 根据两个名字相关的字段, 判断是否已经爬完所有页面, 是否终止爬虫</span>
+        <span class="token keyword">if</span> hdnNextCardName <span class="token operator">!=</span> hdnPreviousCardName<span class="token punctuation">:</span>
+            <span class="token comment"># 提取页面中的数据, 主要是对页面结构的理解</span>
+            <span class="token comment"># 详细页面的结构其实是一个标题加上几条记录信息的样式</span>
+            <span class="token comment"># 详细信息所幸都包含在具有border属性的table中</span>
+            <span class="token comment"># table中的每条tr就是一行信息, 但是页面中有一个bug, 第一行居然是空的</span>
+            <span class="token comment"># 这样表头就存在每个table中第二行了, 然后我们选表头行tr的所有兄弟节点,</span>
+            <span class="token comment"># 就是每一条的人员信息了</span>
+            <span class="token comment"># 接着就是解析每一行的信息, 返回就可以了</span>
+            <span class="token keyword">for</span> emp <span class="token keyword">in</span> response<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'.reportBack table[border] tr:nth-child(2) ~ tr'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token comment"># 每一行信息有6列(td), 有的列包含一个字段信息, 有的包含2-3个字段</span>
+                <span class="token comment"># 前4列都是包含一个字段, 提取再做一些调整及格式化就可以了</span>
+                <span class="token comment"># 第5列包含护照号和国籍两个字段</span>
+                <span class="token comment"># 第6列不太规整, 大部分包含三个字段, 卡号, 卡类型, 过期日期, 有的状态是正在处理中</span>
+                <span class="token comment"># 没有过期日期, 所以过期日期的字段采用负数索引, 选择最后一个字段 </span>
+                <span class="token keyword">yield</span> <span class="token punctuation">&#123;</span>
+                    <span class="token string">"NO"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(1)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"PersonCode"</span><span class="token punctuation">:</span> <span class="token string">"'"</span> <span class="token operator">+</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(2)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"Name"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(3)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"Job"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(4)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract_first<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"PassportNO"</span><span class="token punctuation">:</span> <span class="token string">"'"</span> <span class="token operator">+</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(5)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"Nationlity"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(5)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"CardNO"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(6)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"CardType"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(6)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string">"ExpiryDate"</span><span class="token punctuation">:</span> emp<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'td:nth-child(6)::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">&#125;</span>
+
+            <span class="token comment"># 构造请求下一页的信息, button值为next代表请求下一页</span>
+            formdata <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+                <span class="token string">'__VIEWSTATE'</span><span class="token punctuation">:</span> view_state<span class="token punctuation">,</span>
+                <span class="token string">'__VIEWSTATEGENERATOR'</span><span class="token punctuation">:</span> view_state_generator<span class="token punctuation">,</span>
+                <span class="token string">'__EVENTVALIDATION'</span><span class="token punctuation">:</span> event_validation<span class="token punctuation">,</span>
+                <span class="token string">'hdnNextCardName'</span><span class="token punctuation">:</span> hdnNextCardName<span class="token punctuation">,</span>
+                <span class="token string">'hdnPreviousCardName'</span><span class="token punctuation">:</span> hdnPreviousCardName<span class="token punctuation">,</span>
+                <span class="token string">'hdnButtonClicked'</span><span class="token punctuation">:</span> <span class="token string">"next"</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">yield</span> scrapy<span class="token punctuation">.</span>FormRequest<span class="token punctuation">(</span>self<span class="token punctuation">.</span>start_urls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> formdata<span class="token operator">=</span>formdata<span class="token punctuation">,</span> callback<span class="token operator">=</span>self<span class="token punctuation">.</span>parse<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
+              <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+              <a href="/tags/spider/" rel="tag"># spider</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/01/11/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-2019-01-11-%E9%9D%99%E6%80%81%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-GitHub-Pages-Hexo/" rel="prev" title="静态个人博客搭建(GitHub Pages + Hexo)">
+                  <i class="fa fa-chevron-left"></i> 静态个人博客搭建(GitHub Pages + Hexo)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/01/25/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-2019-01-25-Python%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="Python开发环境配置">
+                  Python开发环境配置 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"b2f2bf30c6555e6534fe32bb04b2f865"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
