@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Django 相关内容[TOC] Part 1. 运行环境等问题1. Django 中无法加载环境变量问题暂时查不到解决办法, 应该是初级问题, 网上答案很诡异, 都是在配置Django的环境变量, 完全get不到点 每次命令行要重启下 2.  MySQL 真正UTF-8支持 设置数据库编码为utf8mb4, 如果表已创建, 可以使用以下SQL语句更改 ALTER TABLE table_name">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大喵小站">
+<meta property="og:url" content="https://wangmaio.site/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-Django-Django/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="Django 相关内容[TOC] Part 1. 运行环境等问题1. Django 中无法加载环境变量问题暂时查不到解决办法, 应该是初级问题, 网上答案很诡异, 都是在配置Django的环境变量, 完全get不到点 每次命令行要重启下 2.  MySQL 真正UTF-8支持 设置数据库编码为utf8mb4, 如果表已创建, 可以使用以下SQL语句更改 ALTER TABLE table_name">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-14T02:07:29.148Z">
+<meta property="article:modified_time" content="2024-06-25T00:40:31.022Z">
+<meta property="article:author" content="Wang Miao">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangmaio.site/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-Django-Django/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-Django-Django/","path":"2024/07/14/编程开发-网站开发-Django-Django/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django-%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9"><span class="nav-number">1.</span> <span class="nav-text">Django 相关内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-1-%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">Part 1. 运行环境等问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Django-%E4%B8%AD%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. Django 中无法加载环境变量问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-MySQL-%E7%9C%9F%E6%AD%A3UTF-8%E6%94%AF%E6%8C%81"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.  MySQL 真正UTF-8支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BD%91%E7%BB%9C%E9%83%A8%E7%BD%B2%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.  网络部署问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-2-Django-%E6%A1%86%E6%9E%B6%E4%B8%AD%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">Part 2: Django 框架中问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Models-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. Models 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A8%A1%E6%9D%BF%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 模板系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Par"><span class="nav-number">1.3.</span> <span class="nav-text">Par</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-Django-Django/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-07-14 10:07:29" itemprop="dateCreated datePublished" datetime="2024-07-14T10:07:29+08:00">2024-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-06-25 08:40:31" itemprop="dateModified" datetime="2024-06-25T08:40:31+08:00">2024-06-25</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Django-相关内容"><a href="#Django-相关内容" class="headerlink" title="Django 相关内容"></a>Django 相关内容</h1><p>[TOC]</p>
+<h2 id="Part-1-运行环境等问题"><a href="#Part-1-运行环境等问题" class="headerlink" title="Part 1. 运行环境等问题"></a>Part 1. 运行环境等问题</h2><h3 id="1-Django-中无法加载环境变量问题"><a href="#1-Django-中无法加载环境变量问题" class="headerlink" title="1. Django 中无法加载环境变量问题"></a>1. Django 中无法加载环境变量问题</h3><p>暂时查不到解决办法, 应该是初级问题, 网上答案很诡异, 都是在配置Django的环境变量, 完全get不到点</p>
+<p>每次命令行要重启下</p>
+<h3 id="2-MySQL-真正UTF-8支持"><a href="#2-MySQL-真正UTF-8支持" class="headerlink" title="2.  MySQL 真正UTF-8支持"></a>2.  MySQL 真正UTF-8支持</h3><ol>
+<li><p>设置数据库编码为<code>utf8mb4</code>, 如果表已创建, 可以使用以下SQL语句更改</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> table_name <span class="token keyword">CONVERT</span> <span class="token keyword">TO</span> <span class="token keyword">CHARACTER</span> <span class="token keyword">SET</span> utf8mb4<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>设置 Django 的 setting.py 文件中 Databse设置, 使连接也为真正UTF8, 加一个 OPTIONS 选项, 在里面设置编码</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">DATABASES <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">'default'</span><span class="token punctuation">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token string">'ENGINE'</span><span class="token punctuation">:</span> <span class="token string">'django.db.backends.mysql'</span><span class="token punctuation">,</span>
+        <span class="token string">'NAME'</span><span class="token punctuation">:</span> <span class="token string">'dj'</span><span class="token punctuation">,</span>
+        <span class="token string">'USER'</span><span class="token punctuation">:</span> USERNAME<span class="token punctuation">,</span>
+        <span class="token string">'PASSWORD'</span><span class="token punctuation">:</span> PASSWORD<span class="token punctuation">,</span>
+        <span class="token string">'HOST'</span><span class="token punctuation">:</span> <span class="token string">'127.0.0.1'</span><span class="token punctuation">,</span>
+        <span class="token string">'PORT'</span><span class="token punctuation">:</span> <span class="token string">'3306'</span><span class="token punctuation">,</span>
+        <span class="token string">'OPTIONS'</span> <span class="token punctuation">:</span> <span class="token punctuation">&#123;</span> <span class="token string">'charset'</span> <span class="token punctuation">:</span> <span class="token string">'utf8mb4'</span> <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h3 id="3-网络部署问题"><a href="#3-网络部署问题" class="headerlink" title="3.  网络部署问题"></a>3.  网络部署问题</h3><p>工作流程:</p>
+<ol>
+<li>本地写代码, git上传到搭建的git服务器上</li>
+<li>服务器上安装Django虚拟环境, 安装uWSGI库, 安装Nginx, 用来跑项目</li>
+</ol>
+<p>局域网搭建服务器流程:</p>
+<ol>
+<li>Ubuntu 安装</li>
+<li>ssh 安装</li>
+<li>安装pip, virtualenv</li>
+<li>建立Python虚拟环境, 安装Django, uWSGI等, 配置uWSGI相应文件, 并运行测试下</li>
+<li>安装Nginx, 配置Nginx指向uWSGI及Django项目等, 测试运行</li>
+<li>外网访问: setting.py中设置<code>ALLOWD_HOST = [&#39;*&#39;]</code>, IPV6可以直接外网访问</li>
+</ol>
+<p>UWSGI配置其他, Nginx安装与配置这些可以展开写一些内容</p>
+<p>局域网搭建Git服务器也可以展开写一些</p>
+<h4 id="uWSGI-安装与配置"><a href="#uWSGI-安装与配置" class="headerlink" title="uWSGI 安装与配置"></a>uWSGI 安装与配置</h4><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p>启动, 停止, 重启</p>
+<h4 id="Nginx-安装与配置"><a href="#Nginx-安装与配置" class="headerlink" title="Nginx 安装与配置"></a>Nginx 安装与配置</h4><h5 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h5><h5 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h5><h5 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h5><p>启动, 停止, 重启</p>
+<h4 id="MariaDB-安装与配置"><a href="#MariaDB-安装与配置" class="headerlink" title="MariaDB 安装与配置"></a>MariaDB 安装与配置</h4><h5 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h5><h5 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h5><h5 id="常用命令-2"><a href="#常用命令-2" class="headerlink" title="常用命令"></a>常用命令</h5><p>启动, 停止, 重启</p>
+<h4 id="Git-服务器安装与相关配置"><a href="#Git-服务器安装与相关配置" class="headerlink" title="Git 服务器安装与相关配置"></a>Git 服务器安装与相关配置</h4><h5 id="服务器上安装Git"><a href="#服务器上安装Git" class="headerlink" title="服务器上安装Git"></a>服务器上安装Git</h5><h5 id="设置专用的Git账户"><a href="#设置专用的Git账户" class="headerlink" title="设置专用的Git账户"></a>设置专用的Git账户</h5><p>Django开发流程:</p>
+<ol>
+<li><p>服务器端初始化一个git仓库</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> init<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>设置仓库接受代码提交</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config receive.denyCurrentBranch ignore<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>设置服务器仓库git提交操作后自动更新的/hook/post-receive. 并且注意改变为可执行模式</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token builtin class-name">unset</span> GIT_DIR
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>
+<span class="token function">git</span> checkout <span class="token parameter variable">-f</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>本地编辑代码后push到服务器(注意先在本地收集静态文件)</p>
+</li>
+</ol>
+<h2 id="Part-2-Django-框架中问题"><a href="#Part-2-Django-框架中问题" class="headerlink" title="Part 2: Django 框架中问题"></a>Part 2: Django 框架中问题</h2><h3 id="1-Models-模型"><a href="#1-Models-模型" class="headerlink" title="1. Models 模型"></a>1. Models 模型</h3><ol>
+<li>编辑 <code>models.py</code> 文件, 改变模型</li>
+<li>运行 <code>python manage.py makemigrations</code> 为模型的改变生成迁移文件</li>
+<li>运行 <code>python manage.py migrate </code> 来应用数据库迁移</li>
+</ol>
+<p>使用Python的数据模型对象可以用filter或get返回对象, filter更像常规的用法, 返回空列表或者对应的数据, get返回可能会报错, 并且通过属性+双下划线的方式来标识某些条件, 在我看来并不优雅, 看似小聪明, 感觉并不利于维护</p>
+<h3 id="2-模板系统"><a href="#2-模板系统" class="headerlink" title="2. 模板系统"></a>2. 模板系统</h3><p>模板系统有点啰嗦, 已经是在对应的app的templates目录下了, 还要在建一个对应的名字的文件夹来区分命名空间</p>
+<h2 id="Par"><a href="#Par" class="headerlink" title="Par"></a>Par</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-Flask-Flask%E7%9F%A5%E8%AF%86/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"5869bda5dfcb10965c66212b1859bfca"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="虚拟机下openEuler的安装与一些常见服务部署网络问题NAT模式下, 虚拟网卡VMnet8相当于一个虚拟的路由器, 分出相应的子网 某些情网络配置并不正确, 需要将网关等配置与虚拟网卡保持一致 修改对应网卡配置文件sudo vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33: TYPE&#x3D;Ethernet BOOTPROTO&#x3D;static NAME&#x3D;en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟机下openEuler的安装与一些常见服务部署">
+<meta property="og:url" content="https://wangmaio.site/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="虚拟机下openEuler的安装与一些常见服务部署网络问题NAT模式下, 虚拟网卡VMnet8相当于一个虚拟的路由器, 分出相应的子网 某些情网络配置并不正确, 需要将网关等配置与虚拟网卡保持一致 修改对应网卡配置文件sudo vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33: TYPE&#x3D;Ethernet BOOTPROTO&#x3D;static NAME&#x3D;en">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangmaio.site/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1VMnet8%E4%BF%A1%E6%81%AF.png">
+<meta property="article:published_time" content="2023-05-27T13:15:00.000Z">
+<meta property="article:modified_time" content="2024-07-15T13:37:23.518Z">
+<meta property="article:author" content="Wang Miao">
+<meta property="article:tag" content="openEuler">
+<meta property="article:tag" content="uWsgi">
+<meta property="article:tag" content="Nginx">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="SeLinux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangmaio.site/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1VMnet8%E4%BF%A1%E6%81%AF.png">
+
+
+<link rel="canonical" href="https://wangmaio.site/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/","path":"2023/05/27/编程开发-Linux-openEuler/","title":"虚拟机下openEuler的安装与一些常见服务部署"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>虚拟机下openEuler的安装与一些常见服务部署 | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8BopenEuler%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2"><span class="nav-number">1.</span> <span class="nav-text">虚拟机下openEuler的安装与一些常见服务部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">网络问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uWsgi%E9%85%8D%E7%BD%AE%E4%B8%8Enginx%E4%BB%A3%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">uWsgi配置与nginx代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uWsgi%E4%BD%BF%E7%94%A8systemd%E6%96%B9%E5%BC%8F%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="nav-number">1.3.</span> <span class="nav-text">uWsgi使用systemd方式自启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh%E8%BF%9C%E7%A8%8B%E7%99%BB%E9%99%86use-ssh-key"><span class="nav-number">1.4.</span> <span class="nav-text">ssh远程登陆use ssh-key</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="虚拟机下openEuler的安装与一些常见服务部署 | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          虚拟机下openEuler的安装与一些常见服务部署
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-27 21:15:00" itemprop="dateCreated datePublished" datetime="2023-05-27T21:15:00+08:00">2023-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-07-15 21:37:23" itemprop="dateModified" datetime="2024-07-15T21:37:23+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">编程开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="虚拟机下openEuler的安装与一些常见服务部署"><a href="#虚拟机下openEuler的安装与一些常见服务部署" class="headerlink" title="虚拟机下openEuler的安装与一些常见服务部署"></a>虚拟机下openEuler的安装与一些常见服务部署</h1><h2 id="网络问题"><a href="#网络问题" class="headerlink" title="网络问题"></a>网络问题</h2><p>NAT模式下, 虚拟网卡VMnet8相当于一个虚拟的路由器, 分出相应的子网</p>
+<p>某些情网络配置并不正确, 需要将网关等配置与虚拟网卡保持一致</p>
+<p>修改对应网卡配置文件<code>sudo vim /etc/sysconfig/network-scripts/ifcfg-ens33</code>:</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">TYPE</span><span class="token punctuation">=</span><span class="token value attr-value">Ethernet</span>
+<span class="token key attr-name">BOOTPROTO</span><span class="token punctuation">=</span><span class="token value attr-value">static</span>
+<span class="token key attr-name">NAME</span><span class="token punctuation">=</span><span class="token value attr-value">ens33</span>
+<span class="token key attr-name">DEVICE</span><span class="token punctuation">=</span><span class="token value attr-value">ens33</span>
+<span class="token key attr-name">ONBOOT</span><span class="token punctuation">=</span><span class="token value attr-value">yes</span>
+<span class="token key attr-name">IPADDR</span><span class="token punctuation">=</span><span class="token value attr-value">192.168.101.130</span>
+<span class="token key attr-name">NETMASK</span><span class="token punctuation">=</span><span class="token value attr-value">255.255.255.0</span>
+<span class="token key attr-name">GATEWAY</span><span class="token punctuation">=</span><span class="token value attr-value">192.168.101.2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<img src="/2023/05/27/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler/%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1VMnet8%E4%BF%A1%E6%81%AF.png" class="" title="虚拟网卡VMnet8信息">
+
+<p><code>IPADDR</code>: 服务器的地址, 选择一个合适地址, 保证和虚拟网卡在一个网段就好<br><code>GATEWAY</code>: 网关, 一般为虚拟网卡同一网卡的第2个地址, 例子中为<code>192.168.101.2</code></p>
+<p>安装好的虚拟机, 虚拟网卡的信息应该类似图中所示, 如果缺少部分, 需要在win下配置对应的信息</p>
+<h2 id="uWsgi配置与nginx代理"><a href="#uWsgi配置与nginx代理" class="headerlink" title="uWsgi配置与nginx代理"></a>uWsgi配置与nginx代理</h2><p><code>uWsgi</code> 安装过程没有太多坑, <code>pip install uwsgi</code>一般会遇到一些问题, 编译错误的根据提示下载<code>gcc</code>或者<code>python-dev</code>之类的就可以解决</p>
+<p>安装后可以简单的配置, 先来一个简单的配置文件</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">uwsgi</span><span class="token punctuation">]</span></span>
+<span class="token comment">#uwsgi启动时，所使用的地址和端口（这个是http协议的）</span>
+<span class="token comment">#http=0.0.0.0:5000</span>
+<span class="token comment">#指向网站目录</span>
+<span class="token key attr-name">chdir</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/myexam/</span>
+<span class="token comment">#python 启动程序文件</span>
+<span class="token key attr-name">wsgi-file</span><span class="token punctuation">=</span><span class="token value attr-value">wsgi.py</span>
+<span class="token comment">#python 程序内用以启动的application 变量名</span>
+<span class="token key attr-name">callable</span><span class="token punctuation">=</span><span class="token value attr-value">app</span>
+<span class="token comment">#处理器数</span>
+<span class="token key attr-name">processes</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+<span class="token comment">#线程数</span>
+<span class="token key attr-name">threads</span><span class="token punctuation">=</span><span class="token value attr-value">2</span>
+<span class="token comment"># uwsgi pid 号</span>
+<span class="token key attr-name">pidfile</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/uwsgi/uwsgi.pid</span>
+
+<span class="token comment"># 重启的时候使用的 pid 号</span>
+<span class="token key attr-name">touch-reload</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/uwsgi/uwsgi.pid</span>
+
+<span class="token comment"># unix socket和TCP socket配置, 在nginx可以使用这两个socket</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/uwsgi/uwsgi.sock</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0:5000</span>
+<span class="token key attr-name">chomod-socket</span><span class="token punctuation">=</span><span class="token value attr-value">666</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>运行<code>/home/miao/.venv/myflask/bin/uwsgi --ini uwsgi.ini</code>, 看是否可以运行</p>
+<p>每次手动运行显然不够优雅, 配置好这个再配置对应的开机自启</p>
+<p><code>Nginx</code>中相应配置, 文件位置一般在<code>/etc/nginx/nginx.conf</code>:</p>
+<p>第一种模式, 单机, 直接再<code>server</code>配置下增加<code>location</code>的配置</p>
+<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx">...
+...
+<span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">listen</span>       <span class="token number">80</span></span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">listen</span>       [::]:80</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">server_name</span>  192.168.101.130</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">root</span>         /usr/share/nginx/html</span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">include</span> uwsgi_params</span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">uwsgi_pass</span> unix:///home/miao/uwsgi/uwsgi.sock</span><span class="token punctuation">;</span>
+        <span class="token comment"># uwsgi_pass 127.0.0.1:5000;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+...
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>uwsgi_pass</code> 指向之前在<code>uwsgi.ini</code>中配置的<code>unix socket</code>或者<code>TCP socket</code></p>
+<p>第二种模式, 集群, 在<code>server</code>外添加<code>upstream</code></p>
+<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">http</span></span> <span class="token punctuation">&#123;</span>
+
+    ...
+    ...
+    <span class="token directive"><span class="token keyword">upstream</span> uwsgicluster</span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">server</span> unix:///home/miao/uwsgi/uwsgi.sock</span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">server</span> 127.0.0.1:5000</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">listen</span>       <span class="token number">80</span></span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">listen</span>       [::]:80</span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">server_name</span>  192.168.101.130</span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">root</span>         /usr/share/nginx/html</span><span class="token punctuation">;</span>
+
+        <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
+            <span class="token directive"><span class="token keyword">include</span> uwsgi_params</span><span class="token punctuation">;</span>
+            <span class="token directive"><span class="token keyword">uwsgi_pass</span> uwsgicluster</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    ...
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这里将在<code>upstream</code>中配置集群, <code>server</code>指向对应的<code>socket</code>, 在<code>location</code>中将<code>uwsgi_pass</code>指向集群<code>uwsgicluster</code></p>
+<p>这些配置后可能遇到的问题:</p>
+<ol>
+<li><code>nginx</code>启动后, 无法正常访问页面</li>
+</ol>
+<p>关闭防火墙试一试</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl stop firewalld
+<span class="token function">sudo</span> systemctl disable firewalld<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li><code>nginx</code>可以启动正常运行, 但<code>uWsgi</code>启动后, 无法被<code>nginx</code>代理</li>
+</ol>
+<p>可能是权限问题, <code>nginx</code>无法读取对应的<code>unix socket</code>, 单机可以使用, 速度应该会更好一点</p>
+<p>注意在<code>uwsgi.ini</code>添加对应配置, 升级权限</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">chmod-socket</span><span class="token punctuation">=</span><span class="token value attr-value">666</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>修改<code>/etc/nginx/nginx.conf</code>, 修改用户为可访问的用户</p>
+<pre class="line-numbers language-conf" data-language="conf"><code class="language-conf"># user nginx;
+user miao;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+<h2 id="uWsgi使用systemd方式自启动"><a href="#uWsgi使用systemd方式自启动" class="headerlink" title="uWsgi使用systemd方式自启动"></a><code>uWsgi</code>使用<code>systemd</code>方式自启动</h2><p>添加配置文件<code>/etc/systemd/system/uwsgi.service</code></p>
+<pre class="line-numbers language-systemd" data-language="systemd"><code class="language-systemd"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Unit</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">Description</span><span class="token punctuation">=</span><span class="token value attr-value">uwsgi</span>
+<span class="token key attr-name">After</span><span class="token punctuation">=</span><span class="token value attr-value">syslog.target</span>
+
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Service</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">Type</span><span class="token punctuation">=</span><span class="token value attr-value">notify</span>
+<span class="token key attr-name">ExecStart</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/.venv/myflask/bin/uwsgi --ini /home/miao/uwsgi/uwsgi.ini</span>
+<span class="token key attr-name">ExecStop</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/.venv/myflask/bin/uwsgi --stop /home/miao/uwsgi/uwsgi.pid</span>
+<span class="token key attr-name">ExecReload</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/.venv/myflask/bin/uwsgi --reload /home/miao/uwsgi/uwsgi.pid</span>
+<span class="token key attr-name">User</span><span class="token punctuation">=</span><span class="token value attr-value">miao</span>
+<span class="token key attr-name">Group</span><span class="token punctuation">=</span><span class="token value attr-value">miao</span>
+<span class="token key attr-name">Restart</span><span class="token punctuation">=</span><span class="token value attr-value">on-failure</span>
+<span class="token key attr-name">KillSignal</span><span class="token punctuation">=</span><span class="token value attr-value">SIGQUIT</span>
+<span class="token key attr-name">StandardError</span><span class="token punctuation">=</span><span class="token value attr-value">syslog</span>
+<span class="token key attr-name">NotifyAccess</span><span class="token punctuation">=</span><span class="token value attr-value">all</span>
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Install</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">WantedBy</span><span class="token punctuation">=</span><span class="token value attr-value">multi-user.target</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>配置好后, 使用下面命令重新加载</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>启动<code>uwsgi</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start uwsgi <span class="token comment"># 启动</span>
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> uwsgi <span class="token comment"># 开机自启</span>
+<span class="token function">sudo</span> systemctl stop uwsgi <span class="token comment"># 关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+<p>如果出现错误, 可以查看是系统日志文件<code>/var/log/message</code>, 如果出现<code>Permission denied</code>的错误, 大概率是<code>SElinux</code>在阻止的问题</p>
+<p>关闭<code>SElinux</code>试一试, <code>vim /etc/selinux/config</code></p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># This file controls the state of SELinux on the system.</span>
+<span class="token comment"># SELINUX= can take one of these three values:</span>
+<span class="token comment">#     enforcing - SELinux security policy is enforced.</span>
+<span class="token comment">#     permissive - SELinux prints warnings instead of enforcing.</span>
+<span class="token comment">#     disabled - No SELinux policy is loaded.</span>
+<span class="token key attr-name">SELINUX</span><span class="token punctuation">=</span><span class="token value attr-value">disabled</span>
+<span class="token comment"># SELINUXTYPE= can take one of these three values:</span>
+<span class="token comment">#     targeted - Targeted processes are protected,</span>
+<span class="token comment">#     minimum - Modification of targeted policy. Only selected processes are protected.</span>
+<span class="token comment">#     mls - Multi Level Security protection.</span>
+<span class="token key attr-name">SELINUXTYPE</span><span class="token punctuation">=</span><span class="token value attr-value">targeted</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>设置<code>SELINUX=disabled</code></p>
+<p>重新启动系统后生效</p>
+<h2 id="ssh远程登陆use-ssh-key"><a href="#ssh远程登陆use-ssh-key" class="headerlink" title="ssh远程登陆use ssh-key"></a>ssh远程登陆use ssh-key</h2><ol>
+<li><p>本地生成密钥文件</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p> 这一步会在<code>~/.ssh/</code>目录下生成公钥和私钥文件</p>
+</li>
+<li><p>将<code>~/.ssh/</code>下的公钥文件<code>id_rsa.pub</code>复制到远程服务器</p>
+</li>
+</ol>
+<pre><code><pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub miao@192.168.101.130<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+成功后, 可以在尝试登录, 现在就不需要输入密码了
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/openEuler/" rel="tag"># openEuler</a>
+              <a href="/tags/uWsgi/" rel="tag"># uWsgi</a>
+              <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/SeLinux/" rel="tag"># SeLinux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/05/08/%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC-%E5%B7%A5%E5%85%B7%E6%8A%80%E5%B7%A7-2020-05-08-%E8%AE%A1%E7%AE%97%E5%99%A8%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7MC-MR-M-M-MS/" rel="prev" title="计算器的小技巧MC MR M+ M- MS">
+                  <i class="fa fa-chevron-left"></i> 计算器的小技巧MC MR M+ M- MS
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91-Flask-Flask%E7%9F%A5%E8%AF%86/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"513b6b2ce32913fb32a82b3e3de9016b"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

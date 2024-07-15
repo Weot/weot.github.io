@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangmaio.site","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Linux(openEular) 下Flask开发环境搭建Linux 本体虚拟机安装[[openEuler]]使用Windows命令行ssh登录虚拟机内系统ssh 用户名密码形式登录ssh username@192.168.101.131  类似登录操作需要每次输入密码 使用ssh key登录 本地生成密钥文件  ssh-keygen -t rsa   这一步会在~&#x2F;.ssh&#x2F;目录下生成公钥和私钥">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openEuler下flask服务器环境搭建">
+<meta property="og:url" content="https://wangmaio.site/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="大喵小站">
+<meta property="og:description" content="Linux(openEular) 下Flask开发环境搭建Linux 本体虚拟机安装[[openEuler]]使用Windows命令行ssh登录虚拟机内系统ssh 用户名密码形式登录ssh username@192.168.101.131  类似登录操作需要每次输入密码 使用ssh key登录 本地生成密钥文件  ssh-keygen -t rsa   这一步会在~&#x2F;.ssh&#x2F;目录下生成公钥和私钥">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangmaio.site/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/nginx%E6%AC%A2%E8%BF%8E%E9%A1%B5%E9%9D%A2.jpg">
+<meta property="article:published_time" content="2024-07-15T13:24:00.000Z">
+<meta property="article:modified_time" content="2024-07-15T13:48:00.000Z">
+<meta property="article:author" content="Wang Miao">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="OpenEuler">
+<meta property="article:tag" content="vscode">
+<meta property="article:tag" content="ssh-key">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangmaio.site/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/nginx%E6%AC%A2%E8%BF%8E%E9%A1%B5%E9%9D%A2.jpg">
+
+
+<link rel="canonical" href="https://wangmaio.site/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangmaio.site/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/","path":"2024/07/15/编程开发-Linux-openEuler下flask服务器环境搭建/","title":"openEuler下flask服务器环境搭建"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>openEuler下flask服务器环境搭建 | 大喵小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">大喵小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时间是十年前, 其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-openEular-%E4%B8%8BFlask%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">Linux(openEular) 下Flask开发环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E6%9C%AC%E4%BD%93"><span class="nav-number">1.1.</span> <span class="nav-text">Linux 本体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85-openEuler"><span class="nav-number">1.2.</span> <span class="nav-text">虚拟机安装[[openEuler]]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Windows%E5%91%BD%E4%BB%A4%E8%A1%8Cssh%E7%99%BB%E5%BD%95%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.3.</span> <span class="nav-text">使用Windows命令行ssh登录虚拟机内系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81%E5%BD%A2%E5%BC%8F%E7%99%BB%E5%BD%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">ssh 用户名密码形式登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ssh-key%E7%99%BB%E5%BD%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用ssh key登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vscode-ssh%E7%99%BB%E5%BD%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">vscode ssh登录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Python-virtualenv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">1.4.</span> <span class="nav-text">安装Python virtualenv虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uWsgi-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">1.5.</span> <span class="nav-text">uWsgi 安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uWsgi-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.1.</span> <span class="nav-text">uWsgi 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uWsgi-%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8"><span class="nav-number">1.5.2.</span> <span class="nav-text">uWsgi 开机启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.</span> <span class="nav-text">nginx 安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-%E8%87%AA%E8%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.1.</span> <span class="nav-text">nginx 自身配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-%E4%BB%A3%E7%90%86uwsgi%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.2.</span> <span class="nav-text">nginx 代理uwsgi配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7%E7%B1%BB%E9%85%8D%E7%BD%AE"><span class="nav-number">1.7.</span> <span class="nav-text">其他工具类配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8Jupyter-notebook-lab%E9%85%8D%E7%BD%AE"><span class="nav-number">1.7.1.</span> <span class="nav-text">服务器使用Jupyter notebook&#x2F;lab配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Esystem-service%E6%97%A0%E6%B3%95%E8%AF%BB%E5%8F%96%E8%87%AA%E5%AE%9A%E4%B9%89%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.7.2.</span> <span class="nav-text">关于system service无法读取自定义环境变量的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E6%97%A0%E6%B3%95%E6%9F%A5%E7%9C%8B%E9%97%AE%E9%A2%98"><span class="nav-number">1.7.3.</span> <span class="nav-text">Nginx服务器日志文件无法查看问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%A4%B1%E8%B4%A5"><span class="nav-number">1.7.4.</span> <span class="nav-text">Nginx服务器上传文件失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5"><span class="nav-number">1.7.5.</span> <span class="nav-text">Git 服务器搭建与代码自动同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openEuler-%E4%B8%8B-PostgreSql-%E5%AE%89%E8%A3%85"><span class="nav-number">1.7.6.</span> <span class="nav-text">openEuler 下 PostgreSql 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AEPG%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE"><span class="nav-number">1.7.7.</span> <span class="nav-text">3. 配置PG数据库远程访问</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang Miao"
+      src="/images/logo.png">
+  <p class="site-author-name" itemprop="name">Wang Miao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weot" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/1575566554" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;1575566554" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangmaio.site/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.png">
+      <meta itemprop="name" content="Wang Miao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="openEuler下flask服务器环境搭建 | 大喵小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          openEuler下flask服务器环境搭建
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-07-15 21:24:00 / 修改时间：21:48:00" itemprop="dateCreated datePublished" datetime="2024-07-15T21:24:00+08:00">2024-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">编程开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Linux-openEular-下Flask开发环境搭建"><a href="#Linux-openEular-下Flask开发环境搭建" class="headerlink" title="Linux(openEular) 下Flask开发环境搭建"></a>Linux(openEular) 下Flask开发环境搭建</h1><h2 id="Linux-本体"><a href="#Linux-本体" class="headerlink" title="Linux 本体"></a>Linux 本体</h2><h2 id="虚拟机安装-openEuler"><a href="#虚拟机安装-openEuler" class="headerlink" title="虚拟机安装[[openEuler]]"></a>虚拟机安装[[openEuler]]</h2><h2 id="使用Windows命令行ssh登录虚拟机内系统"><a href="#使用Windows命令行ssh登录虚拟机内系统" class="headerlink" title="使用Windows命令行ssh登录虚拟机内系统"></a>使用Windows命令行ssh登录虚拟机内系统</h2><h3 id="ssh-用户名密码形式登录"><a href="#ssh-用户名密码形式登录" class="headerlink" title="ssh 用户名密码形式登录"></a>ssh 用户名密码形式登录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> username@192.168.101.131<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>类似登录操作需要每次输入密码</p>
+<h3 id="使用ssh-key登录"><a href="#使用ssh-key登录" class="headerlink" title="使用ssh key登录"></a>使用ssh key登录</h3><ol>
+<li><p>本地生成密钥文件</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p> 这一步会在<code>~/.ssh/</code>目录下生成公钥和私钥文件</p>
+</li>
+<li><p>将<code>~/.ssh/</code>下的公钥文件<code>id_rsa.pub</code>复制到远程服务器</p>
+</li>
+</ol>
+<pre><code><pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub miao@192.168.101.131<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+成功后, 可以在尝试登录, 现在就不需要输入密码了
+</code></pre>
+<h3 id="vscode-ssh登录"><a href="#vscode-ssh登录" class="headerlink" title="vscode ssh登录"></a>vscode ssh登录</h3><p>可能会遇到错误, <code>tar</code>命令不存在</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum installl <span class="token function">tar</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>连接后, 长时间显示正在连接, 可能需要再服务器修改一项设置</p>
+<p>修改<code>/etc/ssh/sshd_config</code>文件, 取消对应行注释</p>
+<pre class="line-numbers language-config" data-language="config"><code class="language-config">AllowTCPForwarding yes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="安装Python-virtualenv虚拟环境"><a href="#安装Python-virtualenv虚拟环境" class="headerlink" title="安装Python virtualenv虚拟环境"></a>安装Python virtualenv虚拟环境</h2><p>安装前配置国内pip源(可选)</p>
+<p><code>pip.conf</code>文件(使用阿里源, 大公司的速动更快一点)</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">global</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">index-url</span> <span class="token punctuation">=</span> <span class="token value attr-value">https://mirrors.aliyun.com/pypi/simple/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>编辑环境变量文件, 设置环境变量<code>PIP_CONFIG_FILE</code>指向<code>pip.conf</code>文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vi</span> /etc/profile.d/pip.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">PIP_CONFIG_FILE</span><span class="token operator">=</span>/home/miao/.conf/pip.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="uWsgi-安装与配置"><a href="#uWsgi-安装与配置" class="headerlink" title="uWsgi 安装与配置"></a>uWsgi 安装与配置</h2><p><code>uWsgi</code> 安装过程没有太多坑, <code>pip install uwsgi</code>一般会遇到一些问题, 编译错误的根据提示下载<code>gcc</code>或者<code>python3-dev</code>之类的就可以解决</p>
+<h3 id="uWsgi-配置文件"><a href="#uWsgi-配置文件" class="headerlink" title="uWsgi 配置文件"></a>uWsgi 配置文件</h3><pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">uwsgi</span><span class="token punctuation">]</span></span>
+<span class="token comment">#uwsgi启动时，所使用的地址和端口（这个是http协议的）</span>
+<span class="token comment">#http=0.0.0.0:5000</span>
+<span class="token comment">#指向网站目录</span>
+<span class="token key attr-name">chdir</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/myexam/</span>
+<span class="token comment">#python 启动程序文件</span>
+<span class="token key attr-name">wsgi-file</span><span class="token punctuation">=</span><span class="token value attr-value">wsgi.py</span>
+<span class="token comment">#python 程序内用以启动的application 变量名</span>
+<span class="token key attr-name">callable</span><span class="token punctuation">=</span><span class="token value attr-value">app</span>
+<span class="token comment">#处理器数</span>
+<span class="token key attr-name">processes</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+<span class="token comment">#线程数</span>
+<span class="token key attr-name">threads</span><span class="token punctuation">=</span><span class="token value attr-value">2</span>
+<span class="token comment"># uwsgi pid 号</span>
+<span class="token key attr-name">pidfile</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/uwsgi/uwsgi.pid</span>
+
+<span class="token comment"># 重启的时候使用的 pid 号</span>
+<span class="token key attr-name">touch-reload</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/uwsgi/uwsgi.pid</span>
+
+<span class="token comment"># unix socket和TCP socket配置, 在nginx可以使用这两个socket</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/uwsgi/uwsgi.sock</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0:5000</span>
+<span class="token key attr-name">chomod-socket</span><span class="token punctuation">=</span><span class="token value attr-value">666</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="uWsgi-开机启动"><a href="#uWsgi-开机启动" class="headerlink" title="uWsgi 开机启动"></a>uWsgi 开机启动</h3><p>添加配置文件<code>/etc/systemd/system/uwsgi.service</code></p>
+<pre class="line-numbers language-service" data-language="service"><code class="language-service">[Unit]
+Description&#x3D;uwsgi
+After&#x3D;syslog.target
+
+[Service]
+Type&#x3D;notify
+ExecStart&#x3D;&#x2F;home&#x2F;miao&#x2F;.venv&#x2F;myflask&#x2F;bin&#x2F;uwsgi --ini &#x2F;home&#x2F;miao&#x2F;uwsgi&#x2F;uwsgi.ini
+ExecStop&#x3D;&#x2F;home&#x2F;miao&#x2F;.venv&#x2F;myflask&#x2F;bin&#x2F;uwsgi --stop &#x2F;home&#x2F;miao&#x2F;uwsgi&#x2F;uwsgi.pid
+ExecReload&#x3D;&#x2F;home&#x2F;miao&#x2F;.venv&#x2F;myflask&#x2F;bin&#x2F;uwsgi --reload &#x2F;home&#x2F;miao&#x2F;uwsgi&#x2F;uwsgi.pid
+User&#x3D;miao
+Group&#x3D;miao
+Restart&#x3D;on-failure
+KillSignal&#x3D;SIGQUIT
+StandardError&#x3D;syslog
+NotifyAccess&#x3D;all
+[Install]
+WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>配置好后, 使用下面命令重新加载</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>启动<code>uwsgi</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start uwsgi <span class="token comment"># 启动</span>
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> uwsgi <span class="token comment"># 开机自启</span>
+<span class="token function">sudo</span> systemctl stop uwsgi <span class="token comment"># 关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="nginx-安装与配置"><a href="#nginx-安装与配置" class="headerlink" title="nginx 安装与配置"></a>nginx 安装与配置</h2><h3 id="nginx-自身配置"><a href="#nginx-自身配置" class="headerlink" title="nginx 自身配置"></a>nginx 自身配置</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum <span class="token function">install</span> nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>安装一般没有太大问题</p>
+<p>现在开启<code>nginx</code>服务</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>想要使服务开机自启, 可以使用下面命令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>现在可以在本机浏览器打开虚拟机服务器IP(比如<code>192.168.101.131</code>), 测试下是否安装成功</p>
+<img src="/2024/07/15/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Linux-openEuler%E4%B8%8Bflask%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/nginx%E6%AC%A2%E8%BF%8E%E9%A1%B5%E9%9D%A2.jpg" class="" title="nginx欢迎页面">
+
+<p>安装成功, 应该可以看到上述欢迎页面</p>
+<p>如果打不开, 可能是防火墙问题, 为了测试方便, 可以关闭防火墙</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl stop firewalld<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="nginx-代理uwsgi配置"><a href="#nginx-代理uwsgi配置" class="headerlink" title="nginx 代理uwsgi配置"></a>nginx 代理uwsgi配置</h3><p><code>Nginx</code>中相应配置, 文件位置一般在<code>/etc/nginx/nginx.conf</code>:</p>
+<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">http</span></span> <span class="token punctuation">&#123;</span>
+...
+    <span class="token directive"><span class="token keyword">upstream</span> flask</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment"># 使用uwsgi的unix socket接口进行通信</span>
+        <span class="token directive"><span class="token keyword">server</span> unix:///home/miao/uwsgi/uwsgi.sock</span><span class="token punctuation">;</span>
+        <span class="token comment"># server 0.0.0.0:5000;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">listen</span>       <span class="token number">80</span></span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">listen</span>       [::]:80</span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">server_name</span>  _</span><span class="token punctuation">;</span>
+        <span class="token directive"><span class="token keyword">root</span>         /usr/share/nginx/html</span><span class="token punctuation">;</span>
+
+        <span class="token directive"><span class="token keyword">charset</span> utf-8</span><span class="token punctuation">;</span>
+
+        <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
+            <span class="token directive"><span class="token keyword">include</span> uwsgi_params</span><span class="token punctuation">;</span>
+            <span class="token comment"># 指定上面的upstream</span>
+            <span class="token directive"><span class="token keyword">uwsgi_pass</span> flask</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+...
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="其他工具类配置"><a href="#其他工具类配置" class="headerlink" title="其他工具类配置"></a>其他工具类配置</h2><h3 id="服务器使用Jupyter-notebook-lab配置"><a href="#服务器使用Jupyter-notebook-lab配置" class="headerlink" title="服务器使用Jupyter notebook/lab配置"></a>服务器使用Jupyter notebook/lab配置</h3><h4 id="1-生成哈希密码"><a href="#1-生成哈希密码" class="headerlink" title="1. 生成哈希密码"></a>1. 生成哈希密码</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jupyter server password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>miao@localhost ~<span class="token punctuation">]</span>$ jupyter server password
+Enter password:
+Verify password:
+<span class="token punctuation">[</span>JupyterPasswordApp<span class="token punctuation">]</span> Wrote hashed password to /home/miao/.jupyter/jupyter_server_config.json<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到<code>~/.jupyter/lab/jupyter_server_config.json</code>文件中已经生产了hashed密码</p>
+<h4 id="2-生成配置Jupyter配置文件"><a href="#2-生成配置Jupyter配置文件" class="headerlink" title="2. 生成配置Jupyter配置文件"></a>2. 生成配置Jupyter配置文件</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jupyter server --generate-config<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>可以看到<code>~/.jupyter/lab/</code>文件夹下生成了<code>jupyter_server_config.py</code>配置文件</p>
+<p>修改允许的IP访问</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">## The IP address the Jupyter server will listen on.</span>
+<span class="token comment">#  Default: 'localhost'</span>
+c<span class="token punctuation">.</span>ServerApp<span class="token punctuation">.</span>ip <span class="token operator">=</span> <span class="token string">'*'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>设置需要密码访问</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">## DEPRECATED in 2.0. Use PasswordIdentityProvider.password_required</span>
+<span class="token comment">#  Default: False</span>
+c<span class="token punctuation">.</span>ServerApp<span class="token punctuation">.</span>password_required <span class="token operator">=</span> <span class="token boolean">True</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>启动<code>jupyter lab</code>, 提示</p>
+<pre class="line-numbers language-log" data-language="log"><code class="language-log"><span class="token punctuation">[</span>C <span class="token date number">2023-10-11</span> <span class="token time number">10:16:43.692</span> ServerApp<span class="token punctuation">]</span> Jupyter servers are configured to only be run with a password<span class="token punctuation">.</span>
+<span class="token punctuation">[</span>C <span class="token date number">2023-10-11</span> <span class="token time number">10:16:43.692</span> ServerApp<span class="token punctuation">]</span> <span class="token property">Hint:</span> run the following command to set a password
+<span class="token punctuation">[</span>C <span class="token date number">2023-10-11</span> <span class="token time number">10:16:43.692</span> ServerApp<span class="token punctuation">]</span>   <span class="token operator">$</span> python <span class="token operator">-</span>m jupyter_server<span class="token punctuation">.</span>auth password<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>根据提示使用<code>python -m jupyter_server.auth password</code>命令生成密码</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python <span class="token parameter variable">-m</span> jupyter_server.auth password
+Provide password:
+Repeat password:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>生成密码后, <code>jupyter_server_config.json</code>文件中会生成对应的hash密码</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"ServerApp"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"password"</span><span class="token operator">:</span> <span class="token string">"argon2:$argon2id$v=19$m=10240,t=10,p=8$a4Fqaw5Q3cGewI0eBol7ig$C+0C8NB0DUX2uiMxCCt1e3IVb4yty28ZXgluDknrJGE"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>此时, 再开启<code>jupyter lab</code>就可以使用密码访问了</p>
+<h4 id="3-将Jupyter-lab设置为服务项目-并开机启动"><a href="#3-将Jupyter-lab设置为服务项目-并开机启动" class="headerlink" title="3. 将Jupyter lab设置为服务项目, 并开机启动"></a>3. 将Jupyter lab设置为服务项目, 并开机启动</h4><p>在<code>/etc/systemd/system/</code>文件下生成<code>jupyter.service</code>文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vi</span> /etc/systemd/system/jupyter.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>文件内容如下:</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Unit</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">Description</span><span class="token punctuation">=</span><span class="token value attr-value">Jupyterlab</span>
+<span class="token key attr-name">After</span><span class="token punctuation">=</span><span class="token value attr-value">network.target</span>
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Service</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">Type</span><span class="token punctuation">=</span><span class="token value attr-value">simple</span>
+<span class="token key attr-name">ExecStart</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/.venv/exam/bin/jupyter-lab --config=/home/miao/.jupyter/jupyter_server_config.py --no-browser</span>
+<span class="token key attr-name">User</span><span class="token punctuation">=</span><span class="token value attr-value">miao</span>
+<span class="token key attr-name">Group</span><span class="token punctuation">=</span><span class="token value attr-value">miao</span>
+<span class="token key attr-name">WorkingDirectory</span><span class="token punctuation">=</span><span class="token value attr-value">/home/miao/myexam/</span>
+<span class="token key attr-name">Restart</span><span class="token punctuation">=</span><span class="token value attr-value">always</span>
+<span class="token key attr-name">RestartSec</span><span class="token punctuation">=</span><span class="token value attr-value">10</span>
+<span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Install</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">WantedBy</span><span class="token punctuation">=</span><span class="token value attr-value">multi-user.target</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>启动jupyter服务</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start jupyter<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<p>设置开机启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> jupyter<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="关于system-service无法读取自定义环境变量的问题"><a href="#关于system-service无法读取自定义环境变量的问题" class="headerlink" title="关于system service无法读取自定义环境变量的问题"></a>关于system service无法读取自定义环境变量的问题</h3><p>问题描述:</p>
+<blockquote>
+<p>用<code>systemctl</code>启动服务后, 无法读取<code>/etc/profile.d/*sh</code>中定义的环境变量</p>
+</blockquote>
+<p>暂时解决办法:</p>
+<p>修改<code>uwsgi.service</code>和<code>jupyter.service</code>描述文件</p>
+<p>在<code>[service]</code>部分添加<code>EnvironmentFile=/etc/profile.d/exam.env</code>指向新定义的环境变量文件</p>
+<p><code>exam.env</code>文件中环境变量定义应该使用<code>key=value</code>的形式, 例如</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">MAIL_USERNAME</span><span class="token operator">=</span>admin@admin.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="Nginx服务器日志文件无法查看问题"><a href="#Nginx服务器日志文件无法查看问题" class="headerlink" title="Nginx服务器日志文件无法查看问题"></a>Nginx服务器日志文件无法查看问题</h3><p>nginx服务器日志默认路径: <code>/var/log/nginx/</code><br>进入<code>/var/log/</code>, 可以看到<code>nginx</code>文件夹的所有者是用户<code>nginx</code>, 因为默认是<code>nginx</code>用户创建的, 可以通过nginx用户查看日志, 或者将<code>nginx/</code>文件夹的所有者改为当前用户</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chown</span> miao <span class="token parameter variable">-R</span> /var/log/nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="Nginx服务器上传文件失败"><a href="#Nginx服务器上传文件失败" class="headerlink" title="Nginx服务器上传文件失败"></a>Nginx服务器上传文件失败</h3><p>查看nginx日志文件:</p>
+<pre class="line-numbers language-log" data-language="log"><code class="language-log"><span class="token date number">2023/10/27</span> <span class="token time number">11:29:33</span> <span class="token punctuation">[</span>crit<span class="token punctuation">]</span> <span class="token number">13286</span><span class="token operator">#</span><span class="token number">0</span><span class="token operator">:</span> <span class="token operator">*</span><span class="token number">1</span> open<span class="token operator">(</span><span class="token operator">)</span> <span class="token string">"/var/lib/nginx/tmp/client_body/0000000001"</span> <span class="token property">failed (13:</span> Permission denied<span class="token operator">)</span><span class="token punctuation">,</span> client<span class="token operator">:</span> <span class="token ip-address constant">192.168.101.1</span><span class="token punctuation">,</span> server<span class="token operator">:</span> _<span class="token punctuation">,</span> request<span class="token operator">:</span> <span class="token string">"POST /add_chapters HTTP/1.1"</span><span class="token punctuation">,</span> host<span class="token operator">:</span> <span class="token string">"192.168.101.131"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>可以看到<code>Permission denied</code>, 应该是权限问题, 这是因为上传到Nginx的文件要先保存在<code>/var/lib/nginx/tmp/</code>下, 查看后发现启动Nginx的用户无文件夹的读写权限</p>
+<p>解决办法: </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chown</span> miao <span class="token parameter variable">-R</span> /var/lib/nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>将文件夹的所有者改为启动Nginx的用户</p>
+<h3 id="Git-服务器搭建与代码自动同步"><a href="#Git-服务器搭建与代码自动同步" class="headerlink" title="Git 服务器搭建与代码自动同步"></a>Git 服务器搭建与代码自动同步</h3><p>需求: 在openeuler服务器上搭建git服务器, 每次push提交后, 代码会自动同步到项目文件夹</p>
+<h4 id="openEuler-上搭建git服务器"><a href="#openEuler-上搭建git服务器" class="headerlink" title="openEuler 上搭建git服务器"></a>openEuler 上搭建git服务器</h4><p>下载git</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">git</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>初始化git服务器目录</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> <span class="token function">git</span>
+<span class="token builtin class-name">cd</span> <span class="token function">git</span>
+<span class="token function">git</span> init <span class="token parameter variable">--bare</span> myexam.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>现在git目录下面就有一个裸git仓库</p>
+<p>现在在本机, 将本地项目代码关联到这个远程仓库</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> remote set-url origin miao@192.168.1.169:~/git/myexam.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>查看远程仓库关联结果</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">git</span> remote <span class="token parameter variable">-v</span>
+origin  miao@192.168.1.169:~/git/myexam.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+origin  miao@192.168.1.169:~/git/myexam.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>然后, 将本地代码推送到远程服务器</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>现在回到服务器, 将git仓库中的代码clone到我们需要打代码目录</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone ~/git/myexam.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="设置git提交后代码自动同步"><a href="#设置git提交后代码自动同步" class="headerlink" title="设置git提交后代码自动同步"></a>设置git提交后代码自动同步</h4><p>我们可以在服务器git仓库的hooks目录看到有许多可供调用的脚本文件, 这里我们使用post-update钩子, 里面是一些钩子文件的示例, 需要使用哪个, 就用去掉.sample后缀的格式</p>
+<pre class="line-numbers language-none"><code class="language-none">total 60
+-rwxr-xr-x. 1 miao miao  478 Nov 18 10:52 applypatch-msg.sample
+-rwxr-xr-x. 1 miao miao  896 Nov 18 10:52 commit-msg.sample
+-rwxr-xr-x. 1 miao miao 4655 Nov 18 10:52 fsmonitor-watchman.sample
+-rwxr-xr-x. 1 miao miao  189 Nov 18 10:52 post-update.sample
+-rwxr-xr-x. 1 miao miao  424 Nov 18 10:52 pre-applypatch.sample
+-rwxr-xr-x. 1 miao miao 1643 Nov 18 10:52 pre-commit.sample
+-rwxr-xr-x. 1 miao miao  416 Nov 18 10:52 pre-merge-commit.sample
+-rwxr-xr-x. 1 miao miao 1492 Nov 18 10:52 prepare-commit-msg.sample
+-rwxr-xr-x. 1 miao miao 1374 Nov 18 10:52 pre-push.sample
+-rwxr-xr-x. 1 miao miao 4898 Nov 18 10:52 pre-rebase.sample
+-rwxr-xr-x. 1 miao miao  544 Nov 18 10:52 pre-receive.sample
+-rwxr-xr-x. 1 miao miao 2783 Nov 18 10:52 push-to-checkout.sample
+-rwxr-xr-x. 1 miao miao 3650 Nov 18 10:52 update.sample<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>我们来设置下post-update脚本, 这个钩子将会在代码提交后自动调用</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vi</span> ~/git/myexam.git/hooks/post-update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>post-update</code> 的内容</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token comment"># 打印输出</span>
+<span class="token builtin class-name">echo</span> <span class="token string">'======上传代码到服务器======'</span>
+<span class="token comment"># 打开线上项目文件夹</span>
+<span class="token builtin class-name">cd</span> /home/miao/myexam
+<span class="token comment"># 这个很重要，如果不取消的话将不能在cd的路径上进行git操作</span>
+<span class="token builtin class-name">unset</span> GIT_DIR
+<span class="token function">git</span> pull origin master
+<span class="token comment"># 自动编译vue项目,如有需要请去掉前面的#号</span>
+<span class="token comment"># npm run build</span>
+<span class="token comment"># 自动更新composer（我暂时没试过）</span>
+<span class="token comment"># composer update</span>
+<span class="token builtin class-name">echo</span> <span class="token variable"><span class="token variable">$(</span><span class="token function">date</span><span class="token variable">)</span></span> <span class="token operator">>></span> hook.log
+<span class="token builtin class-name">echo</span> <span class="token string">'======代码更新完成======'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>给<code>post-update</code> 文件加上可执行权限</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chmod</span> +x ~/git/myexam.git/hooks/post-update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>现在可以提交代码, 测试下, 看是否可以同步</p>
+<h3 id="openEuler-下-PostgreSql-安装"><a href="#openEuler-下-PostgreSql-安装" class="headerlink" title="openEuler 下 PostgreSql 安装"></a>openEuler 下 PostgreSql 安装</h3><h4 id="1-下载安装"><a href="#1-下载安装" class="headerlink" title="1. 下载安装"></a>1. 下载安装</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum <span class="token function">install</span> postgresql-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="2-数据库初始配置"><a href="#2-数据库初始配置" class="headerlink" title="2. 数据库初始配置"></a>2. 数据库初始配置</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> postgresql-setup <span class="token parameter variable">--initdb</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>默认情况下pg已经默认创建了一个<code>postgres</code>Linux用户, 我们先为这个用户设置密码</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">passwd</span> postgres<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>设置完毕后切换到<code>postgres</code>用户登录系统</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">su</span> - postgres <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>修改pg数据库用户<code>postgres</code>的密码, 之后我们可以用这个密码来连接pg数据库</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">psql <span class="token parameter variable">-d</span> template1 <span class="token parameter variable">-c</span> <span class="token string">"ALTER USER postgres WITH PASSWORD 'NewPassword';"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="3-配置PG数据库远程访问"><a href="#3-配置PG数据库远程访问" class="headerlink" title="3. 配置PG数据库远程访问"></a>3. 配置PG数据库远程访问</h3><p>修改配置文件<code>/var/lib/pgsql/data/postgresql.conf</code>文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vi</span> /var/lib/pgsql/data/postgresql.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>文件内容如下:</p>
+<pre class="line-numbers language-conf" data-language="conf"><code class="language-conf">#------------------------------------------------------------------------------
+# CONNECTIONS AND AUTHENTICATION
+#------------------------------------------------------------------------------
+
+# - Connection Settings -
+
+listen_addresses &#x3D; &#39;*&#39;          # what IP address(es) to listen on;
+                                        # comma-separated list of addresses;
+                                        # defaults to &#39;localhost&#39;; use &#39;*&#39; for all
+                                        # (change requires restart)
+port &#x3D; 5432                             # (change requires restart)
+max_connections &#x3D; 100                   # (change requires restart)
+#superuser_reserved_connections &#x3D; 3     # (change requires restart)
+#unix_socket_directories &#x3D; &#39;&#x2F;var&#x2F;run&#x2F;postgresql, &#x2F;tmp&#39;  # comma-separated list of directories
+                                        # (change requires restart)
+#unix_socket_group &#x3D; &#39;&#39;                 # (change requires restart)
+#unix_socket_permissions &#x3D; 0777         # begin with 0 to use octal notation
+                                        # (change requires restart)
+#bonjour &#x3D; off                          # advertise server via Bonjour
+                                        # (change requires restart)
+#bonjour_name &#x3D; &#39;&#39;                      # defaults to the computer name
+                                        # (change requires restart)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改<code>listen_addresses = &#39;*&#39;</code>行, 监听所有IP, 并去掉注释</p>
+<p>修改<code>port = 5432</code>, 可以更改端口号, 也可以不变, 但去掉前面注释</p>
+<p>修改<code>/var/lib/pgsql/data/pg_hba.conf</code> 文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vi</span> /var/lib/pgsql/data/pg_hba.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>修改PG的访问规则</p>
+<pre class="line-numbers language-conf" data-language="conf"><code class="language-conf"># TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# &quot;local&quot; is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1&#x2F;32            ident
+# IPv6 local connections:
+host    all             all             ::1&#x2F;128                 ident
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+#local   replication     all                                     peer
+#host    replication     all             127.0.0.1&#x2F;32            ident
+#host    replication     all             ::1&#x2F;128                 ident
+host    all     all             0.0.0.0&#x2F;0                 md5<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>注释掉原来的几条规则,  增加最后一行的规则</p>
+<pre class="line-numbers language-conf" data-language="conf"><code class="language-conf">host    all     all             0.0.0.0&#x2F;0                 md5<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>现在重启PG服务</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>重启后可以用navicat客户端等测试下连接是否可以成功</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/OpenEuler/" rel="tag"># OpenEuler</a>
+              <a href="/tags/vscode/" rel="tag"># vscode</a>
+              <a href="/tags/ssh-key/" rel="tag"># ssh-key</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/07/14/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91-Python-Python%E9%80%9F%E8%AE%B0/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Miao</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"weot","repo":"weot.github.io","client_id":"584128d465c8539b3ac8","client_secret":"f698eefe1358c9cff6b754d137d23c9709875c78","admin_user":"Weot","distraction_free_mode":true,"language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"72ef14b509bac580949bdd56219e67ad"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
